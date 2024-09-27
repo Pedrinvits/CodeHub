@@ -3,46 +3,42 @@ import { db } from "@/lib/db";
 import { auth } from "../auth";
 import { getUserByEmail } from "./user";
 
-type Post  = {
-    title : String,
-    description : String,
-    authorId ?: String | Number,
-}
-export const createPosts = async (title, description : Post)  => {
-    const session =  await auth()
-    const authorId = session?.user?.user?.email
-    const  user = await getUserByEmail(authorId);
-    console.log(user?.id);
-    
+export const createInformations = async (
+  salary: number, 
+  education: string, 
+  creditCards: number, 
+  debts: number, 
+  savings: number
+) => {
   try {
-    const post = await db.post.create({
-      data : {
-        description : description,
-        title : title,
-        authorId : user?.id,
-        // id : '4',
-      }
-    });
-    // console.log(post);
+    // Autenticação para obter a sessão e o ID do usuário
+    const session = await auth();
+    const authorId = session?.user?.email;
 
-    return { sucess : "Post Created!", error : null};
-  } catch (error) {
-    console.log(error);
-    
-  }
-};
+    // Obtenção do usuário pelo e-mail
+    const user = await getUserByEmail(authorId);
 
-export const getAllPosts = async () => {
-  try {
-    const posts = await db.post.findMany({
-      include: {
-        author: true,
-        // comments: true,
+    if (!user) {
+      throw new Error('Usuário não encontrado.');
+    }
+
+    // Atualizando as informações do usuário no banco de dados
+    const updatedUser = await db.user.update({
+      where: { id: user.id }, // Atualiza o usuário baseado no ID
+      data: {
+        salary: salary,
+        education: education,
+        creditCards: creditCards,
+        debts: debts,
+        savings: savings,
       },
     });
-    return posts;
+
+    console.log('Informações atualizadas:', updatedUser);
+
+    return { success: "Informações atualizadas com sucesso!", error: null };
   } catch (error) {
-    console.log(error);
-    
+    console.error('Erro ao atualizar as informações:', error);
+    return { success: null, error: "Erro ao atualizar as informações." };
   }
 };

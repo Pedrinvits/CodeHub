@@ -10,95 +10,14 @@ import { Eye, EyeOff, SettingsIcon } from "lucide-react"
 import { useState } from "react"
 import { getUserByEmail } from "../../../data/user"
 import { useSession } from "next-auth/react";
-import { updateUserName } from "../../../data/updateUserName"
-import { updateUserEmail } from "../../../data/updateUserEmail"
-import { deleteUser } from "../../../data/deleteUser"
-import { redirect } from 'next/navigation'
-import { updateUserPassword } from "../../../data/updateUserPassword"
-import { toast, useToast } from "@/hooks/use-toast"
-interface StatePassword  {
-  currentpassword : string;
-  newpassword : string;
-  confirmpassword : string;
-}
-interface AccountSettingsProps {
-  name: string;
-  email: string;
-}
-export default function AccountSettings({name,email} :AccountSettingsProps ) {
 
-  const { toast } = useToast()
+export default function AccountSettings({name,email} : string) {
   const [selectedOption, setSelectedOption] = useState("profile")
   const [seePassword,SetseePassword] = useState<boolean>(false)
-  const [userData, setUserData] = useState({ name, email });
-  const [passwordData, setpasswordData] = useState<StatePassword>({ 
-    currentpassword : '', newpassword : '', confirmpassword : '' 
-  });
-  const [deleteWord, setDeleteWord] = useState('');
-
-  const handleProfileUpdate = async () => {
-    try {
-
-      if(userData.name !== name){
-        if (userData.name == name) {
-          return
-        }
-        else{
-         const result =  await updateUserName(userData.name)
-         toast({
-          title: "Nome alterado com sucesso!",
-          })
-         
-        }
-      }
-
-     if(userData.email !== email){
-      if (userData.email == email) {
-        return
-      }else{
-        const result = await updateUserEmail(userData.email)
-        toast({
-          title: "Email alterado com sucesso!",
-          })
-      }
-     }
-      
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-  const handlePasswordUpdate = async () => {
-    try {
-          if(passwordData.newpassword !== passwordData.confirmpassword){
-            console.log('Senhas digitadas sao incorretas');
-          }
-          const result = await updateUserPassword(passwordData.currentpassword, passwordData?.newpassword)
-          toast({
-            title: "Senha alterada com sucesso!",
-            })
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-  const handleDeleteAccount = async () => {
-    try {
-     if(deleteWord !== name){
-        console.log('Digite seu nome corretamente');
-        
-     }else{
-        const result = await deleteUser()
-          toast({
-            title: "Conta excluída com sucesso!",
-          })
-          redirect('/auth/register')
-     }
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
+  // buscar infos do usuario para preencher o modal e fazer o crud
+  console.log(name);
+  console.log(email);
+  
   return (
     <>
       <Dialog>
@@ -142,6 +61,8 @@ export default function AccountSettings({name,email} :AccountSettingsProps ) {
                   </div>
                   <div className="grid gap-4">
                     <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" defaultValue={name} />
                       <Label htmlFor="name">Nome</Label>
                       <Input 
                         id="name" 
@@ -150,6 +71,8 @@ export default function AccountSettings({name,email} :AccountSettingsProps ) {
                         />
                     </div>
                     <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" defaultValue={email} />
                       <Label htmlFor="email">Email</Label>
                       <Input 
                         id="email" 

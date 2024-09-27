@@ -4,9 +4,9 @@ services:
     image: postgres:13
     restart: always
     environment:
-      - POSTGRES_USER=code_user
-      - POSTGRES_PASSWORD=code_password
-      - POSTGRES_DB=code_db
+      - POSTGRES_USER=safe_land_user
+      - POSTGRES_PASSWORD=safe_land_password
+      - POSTGRES_DB=safe_land_db
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:

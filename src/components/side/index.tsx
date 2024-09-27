@@ -28,7 +28,7 @@ export default function Component() {
               <HomeIcon className="h-4 w-4" />
               Home
             </Link>
-            <Link
+            {/* <Link
               href="#"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               prefetch={false}
@@ -36,15 +36,15 @@ export default function Component() {
             <UserRound className="h-4 w-4"/>
              
               Profile
-            </Link> 
-            <Link
+            </Link>  */}
+            {/* <Link
               href="#"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               prefetch={false}
             >
               <UsersIcon className="h-4 w-4" />
               Contact
-            </Link>
+            </Link> */}
           </nav>
           <div className="mt-auto space-y-2 border-t pt-4">
             <Button variant="outline" className="w-full">
@@ -52,7 +52,7 @@ export default function Component() {
                 Logout
             </Button>
                 <div className="w-full flex ">
-                <AccountSettings/>
+                <AccountSettings email={user?.email} name={user?.name} password={user?.password}/>
                 </div>
             </div>
         </div>
@@ -88,14 +88,14 @@ export default function Component() {
                   <FileIcon className="h-4 w-4" />
                   About
                 </Link> 
-                <Link
+                {/* <Link
                   href="#"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   prefetch={false}
                 >
                   <UsersIcon className="h-4 w-4" />
                   Contact
-                </Link>
+                </Link> */}
               </nav>
               <div className="mt-auto space-y-2 border-t pt-4">
                 <Button variant="outline" className="w-full">

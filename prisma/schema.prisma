@@ -11,28 +11,10 @@ model User {
   name          String?
   email         String?   @unique
   password      String?
-  posts Post[]
+  salary        Float?  
+  education     String? 
+  creditCards   Int?     
+  debts         Float?  
+  savings       Float?  
   @@map("users")
-}
-
-model Post {
-  id Int @id @default(autoincrement())
-  title String
-  description String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-  author User @relation(fields: [authorId],references: [id])
-  authorId Int
-  coments Coment[]
-  @@map("posts")
-}
-
-model Coment {
-  id Int @id @default(autoincrement())
-  coment String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-  post Post @relation(fields: [post_id],references: [id])
-  post_id Int
-  @@map("comments")
 }

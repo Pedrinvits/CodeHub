@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/theme-provider/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { auth } from "../../auth";
 import { Session_Provider } from "./auth/session-provider";
-import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -14,7 +13,7 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: "Codehub",
+  title: "SafeLend ",
   description: "Seu hub de noticias",
 };
 
@@ -24,6 +23,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth()
+  
   return (
     <Session_Provider  session={session}>
       <html lang="pt-br" suppressHydrationWarning>
@@ -40,7 +40,6 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              <Toaster />
             </ThemeProvider>
         </body>
       </html>
