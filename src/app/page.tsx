@@ -1,20 +1,10 @@
-import Image from "next/image";
-import { auth, signOut } from "../../auth";
-import { redirect } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import CreatePost from "@/components/CreatePost";
-import ShowPosts from "@/components/ShowPosts";
-import Side from "@/components/side";
-
+import RecentsPosts from "@/components/recentsPosts";
 export default  async function Home() {
-  const session =  await auth()
-
   return (
     <>
-        <Side/>
+        <main className="p-4 md:p-6 w-full">
+            <RecentsPosts/>
+        </main>
     </>
   );
 }

@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { auth } from "../../auth";
 import { Session_Provider } from "./auth/session-provider";
+import Side from "@/components/side";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export default async function RootLayout({
       <html lang="pt-br" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen bg-background font-sans antialiased flex sm:flex-row flex-col",
             fontSans.variable
           )}
         >
@@ -39,6 +40,7 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <Side/>
               {children}
             </ThemeProvider>
         </body>
