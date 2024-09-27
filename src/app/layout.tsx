@@ -13,7 +13,7 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: "SafeLend ",
+  title: "CodeHub ",
   description: "Seu hub de noticias",
 };
 
