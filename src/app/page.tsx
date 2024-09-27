@@ -14,11 +14,7 @@ export default  async function Home() {
 
   return (
     <>
-      {/* <div className="mx-auto max-w-2xl space-y-6 py-12 md:py-16"> */}
         <Side/>
-      {/* <ShowPosts/> */}
-      {/* <CreatePost/> */}
-      {/* </div> */}
     </>
   );
 }
