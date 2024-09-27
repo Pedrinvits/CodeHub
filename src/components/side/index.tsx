@@ -1,8 +1,3 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/GBoqQrtBx82
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import Link from "next/link"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -10,6 +5,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { LogOutIcon, SettingsIcon, UserRound } from "lucide-react"
 import { ModeToggle } from "../mode-toggle"
 import AccountSettings from "../accountSettings"
+import { auth } from "../../../auth"
+import { getUserById } from "../../../data/user"
+
+const session = await auth();
+const user = await  getUserById(parseInt(session?.id))
+console.log('EMAIL ANTES DA FUNCAO = ',user?.email);
+console.log('NOME ANTES DA FUNCAO = ',user?.name);
 
 export default function Component() {
   return (
@@ -100,13 +102,13 @@ export default function Component() {
                     <LogOutIcon className="h-5 w-5 mr-2" />
                     Logout
                 </Button>
-                <AccountSettings/>
+                <AccountSettings email={user?.email} name={user?.name} />
                 </div>
             </SheetContent>
           </Sheet>
         </header>
         <main className="p-4 md:p-6">
-          <h1 className="text-2xl font-bold">Welcome to Codehub</h1>
+          <h1 className="text-2xl font-bold">Welcome, {session?.user?.name}!</h1>
           <p className="mt-2 text-muted-foreground">Explore our news</p>
 
         </main>
