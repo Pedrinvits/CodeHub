@@ -2,12 +2,13 @@ import Link from "next/link"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MountainIcon, SettingsIcon, UserRound } from "lucide-react"
+import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MountainIcon, SettingsIcon, UserRound, UsersIcon } from "lucide-react"
 import { ModeToggle } from "../mode-toggle"
 import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
 import { getUserById } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 export default async function Component() {
   
@@ -37,14 +38,40 @@ export default async function Component() {
              
               Profile
             </Link> 
-            {/* <Link
+            <Link
               href="#"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               prefetch={false}
             >
               <UsersIcon className="h-4 w-4" />
               Contact
-            </Link> */}
+            </Link>
+            <aside className="">
+            <h2 className="text-xl font-semibold mb-4">Trending</h2>
+            <ul className="space-y-2">
+              {[1, 2, 3, 4, 5].map((trend) => (
+                <li key={trend} className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-500">#{trend}</span>
+                  <span>Trending Topic {trend}</span>
+                </li>
+              ))}
+            </ul>
+            <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
+            <ul className="space-y-4">
+              {[1, 2, 3].map((user) => (
+                <li key={user} className="flex items-center gap-2">
+                  <Avatar>
+                    <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
+                    <AvatarFallback>U{user}</AvatarFallback>
+                  </Avatar>
+                  <span>User {user}</span>
+                  <Button variant="outline" size="sm" className="ml-auto">
+                    Follow
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </aside>
           </nav>
           <div className="mt-auto space-y-2 border-t pt-4">
             <Button variant="outline" className="w-full">
@@ -88,14 +115,40 @@ export default async function Component() {
                   <FileIcon className="h-4 w-4" />
                   About
                 </Link> 
-                {/* <Link
+                <Link
                   href="#"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   prefetch={false}
                 >
                   <UsersIcon className="h-4 w-4" />
                   Contact
-                </Link> */}
+                </Link>
+                <aside className="">
+                  <h2 className="text-xl font-semibold mb-4">Trending</h2>
+                  <ul className="space-y-2">
+                    {[1, 2, 3, 4, 5].map((trend) => (
+                      <li key={trend} className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-500">#{trend}</span>
+                        <span>Trending Topic {trend}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
+                  <ul className="space-y-4">
+                    {[1, 2, 3].map((user) => (
+                      <li key={user} className="flex items-center gap-2">
+                        <Avatar>
+                          <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
+                          <AvatarFallback>U{user}</AvatarFallback>
+                        </Avatar>
+                        <span>User {user}</span>
+                        <Button variant="outline" size="sm" className="ml-auto">
+                          Follow
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
               </nav>
               <div className="mt-auto space-y-2 border-t pt-4">
                 <Button variant="outline" className="w-full">
