@@ -8,10 +8,12 @@ import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
 import { getUserById } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
-const session : any = await auth();
-const user:any = await  getUserById(parseInt(session?.id))
-export default function Component() {
- 
+
+export default async function Component() {
+  
+  const session : any = await auth();
+  const user:any = await  getUserById(parseInt(session?.id))
+  
   return (
     <div className="flex min-h-fit">
       <div className="hidden lg:block border-r w-[16rem]">
