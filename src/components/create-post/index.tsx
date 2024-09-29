@@ -1,15 +1,13 @@
+"use client"
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Textarea } from "../ui/textarea";
+import { createpost } from "../../../data/createPost";
 
 type Post = {
-    id: number
-    user: string
-    content: string
-    timestamp: string
-    likes: number
-    comments: Comment[]
+    title : string
+    description: string
   }
   
 const CreatePost = () => {
@@ -48,21 +46,21 @@ const CreatePost = () => {
 const [newPost, setNewPost] = useState<string>("")
 const [posts, setPosts] = useState<Post[]>(samplePosts)
 
-  const submitNewPost = () => {
-    console.log('asdas = ');
+  const submitNewPost = async () => {
+  
     if (newPost.trim()) {
       const newPostObject: Post = {
-        id: posts.length + 1,
-        user: "Current User",
-        content: newPost.trim(),
-        timestamp: "Just now",
-        likes: 0,
-        comments: []
+        title : "",
+        description: newPost.trim()
       }
-      console.log('post = ',newPostObject);
-      
-    //   setPosts(prevPosts => [newPostObject, ...prevPosts])
-    //   setNewPost("")
+     
+      const insertPost = await createpost(newPostObject)
+     
+      if (insertPost.success){
+        // TODO : insert Sucess Toast here
+        setPosts(prevPosts => [newPostObject, ...prevPosts])
+        setNewPost("")
+      }
     }
   }
   const handleNewPost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -83,6 +81,7 @@ const [posts, setPosts] = useState<Post[]>(samplePosts)
             />
           </CardContent>
           <CardFooter className="flex justify-end">
+            {/* TODO : add loading in this button */}
             <Button onClick={submitNewPost}>Post</Button>
           </CardFooter>
         </Card>

@@ -2,13 +2,14 @@
 import { db } from "@/lib/db";
 import { auth } from "../auth";
 import { getUserByEmail } from "./user";
+type Post = {
+  title: string
+  description: string
+}
+export const createpost = async (
 
-export const createInformations = async (
-  salary: number, 
-  education: string, 
-  creditCards: number, 
-  debts: number, 
-  savings: number
+  post: Post
+
 ) => {
   try {
     // Autenticação para obter a sessão e o ID do usuário
@@ -22,19 +23,13 @@ export const createInformations = async (
       throw new Error('Usuário não encontrado.');
     }
 
-    // Atualizando as informações do usuário no banco de dados
-    const updatedUser = await db.user.update({
-      where: { id: user.id }, // Atualiza o usuário baseado no ID
+    const createPost = await db.post.create({
       data: {
-        salary: salary,
-        education: education,
-        creditCards: creditCards,
-        debts: debts,
-        savings: savings,
+        authorId: user.id,
+        title: post.title,
+        description: post.description
       },
     });
-
-    console.log('Informações atualizadas:', updatedUser);
 
     return { success: "Informações atualizadas com sucesso!", error: null };
   } catch (error) {

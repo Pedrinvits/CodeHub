@@ -1,5 +1,5 @@
+"use client"
 import { Heart, MessageCircle, Share2, Send } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
@@ -46,16 +46,16 @@ const Posts = ({prop} : any) => {
             <Card key={post.id} className="w-full max-w-2xl mx-auto">
               <CardHeader className="flex flex-row items-center gap-4">
                 <Avatar>
-                  <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} />
-                  <AvatarFallback>{post.user.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  {/* <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} /> */}
+                  {/* <AvatarFallback>{post.user.split(' ').map(n => n[0]).join('')}</AvatarFallback> */}
                 </Avatar>
                 <div>
                   <p className="font-semibold">{post.user}</p>
-                  <p className="text-sm text-gray-500">{post.timestamp}</p>
+                  <p className="text-sm text-gray-500">{post.title}</p>
                 </div>
               </CardHeader>
               <CardContent>
-                <p>{post.content}</p>
+                <p>{post.description}</p>
               </CardContent>
               <CardFooter className="flex flex-col">
                 <div className="flex justify-between w-full">
@@ -71,7 +71,7 @@ const Posts = ({prop} : any) => {
                     aria-controls={`comments-${post.id}`}
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
-                    {post.comments.length} Comments
+                    {/* {post.comments.length} Comments */}
                   </Button>
                   <Button variant="ghost" size="sm">
                     <Share2 className="w-4 h-4 mr-2" />
@@ -80,7 +80,7 @@ const Posts = ({prop} : any) => {
                 </div>
                 {activeCommentSection === post.id && (
                   <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2">
-                    {post.comments.map((comment) => (
+                    {/* {post.comments.map((comment) => (
                       <div key={comment.id} className="flex items-start gap-2 text-sm">
                         <Avatar className="w-6 h-6">
                           <AvatarImage src={`/placeholder.svg?height=24&width=24`} alt={`${comment.user}'s avatar`} />
@@ -92,7 +92,7 @@ const Posts = ({prop} : any) => {
                           <p>{comment.content}</p>
                         </div>
                       </div>
-                    ))}
+                    ))} */}
                     <div className="flex gap-2 mt-2">
                       <Input
                         placeholder="Add a comment..."
