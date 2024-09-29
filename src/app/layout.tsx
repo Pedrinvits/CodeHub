@@ -30,7 +30,7 @@ export default async function RootLayout({
       <html lang="pt-br" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased flex sm:flex-row flex-col",
+            "min-h-fit bg-background font-sans antialiased",
             fontSans.variable
           )}
         >
@@ -40,7 +40,6 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <Side/>
               {children}
             </ThemeProvider>
         </body>
