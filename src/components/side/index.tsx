@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -9,19 +8,10 @@ import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
 import { getUserById } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
-import { useEffect,useState } from "react"
-
+const session : any = await auth();
+const user:any = await  getUserById(parseInt(session?.id))
 export default function Component() {
-  const [user,setUser] = useState('')
-  useEffect(()=>{
-      const userFetch = async () => {
-        const session : any = await auth();
-        const user:any = await  getUserById(parseInt(session?.id))
-        setUser(user)
-      }
-  },[])
-  console.log(user);
-  
+ 
   return (
     <div className="flex min-h-fit">
       <div className="hidden lg:block border-r w-[16rem]">
