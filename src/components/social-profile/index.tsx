@@ -5,9 +5,12 @@ import { Heart, MessageCircle, Share2, Send } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardContent, CardFooter } from "../ui/card";
 import { Textarea } from "../ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { findposts } from "../../../data/findPost";
+import Posts from "../posts";
+import CreatePost from "../create-post";
 
 type Comment = {
     id: number
@@ -71,11 +74,18 @@ type Comment = {
   ]
   
 const SocialProfile = () => {
-    const [posts, setPosts] = useState<Post[]>(samplePosts)
+    const [posts, setPosts] = useState<Post[]>([])
     const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null)
     const [newComment, setNewComment] = useState<string>("")
     const [newPost, setNewPost] = useState<string>("")
-  
+
+    useEffect(()=>{
+        const fetch = async () => {
+          const res = await findposts()
+          setPosts(res.posts) 
+        }
+        fetch()
+    },[])
     const toggleCommentSection = (postId: number) => {
       setActiveCommentSection(prevId => prevId === postId ? null : postId)
       setNewComment("")
@@ -134,94 +144,9 @@ const SocialProfile = () => {
               <TabsTrigger value="media" className="flex-1">Media</TabsTrigger>
               <TabsTrigger value="likes" className="flex-1">Likes</TabsTrigger>
             </TabsList>
-            <TabsContent value="posts">
-              <Card className="mb-6">
-                <CardHeader>
-                  <h2 className="text-lg font-semibold">Create a new post</h2>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder="What's on your mind?"
-                    value={newPost}
-                    onChange={handleNewPost}
-                    rows={3}
-                    className="w-full"
-                  />
-                </CardContent>
-                <CardFooter className="flex justify-end">
-                  <Button onClick={submitNewPost}>Post</Button>
-                </CardFooter>
-              </Card>
-              <div className="space-y-4">
-                {posts.map((post) => (
-                  <Card key={post.id}>
-                    <CardHeader className="flex flex-row items-center gap-4">
-                      <Avatar>
-                        <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} />
-                        <AvatarFallback>{post.user.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold">{post.user}</p>
-                        <p className="text-sm text-gray-500">{post.timestamp}</p>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p>{post.content}</p>
-                    </CardContent>
-                    <CardFooter className="flex flex-col">
-                      <div className="flex justify-between w-full">
-                        <Button variant="ghost" size="sm">
-                          <Heart className="w-4 h-4 mr-2" />
-                          {post.likes} Likes
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={() => toggleCommentSection(post.id)}
-                          aria-expanded={activeCommentSection === post.id}
-                          aria-controls={`comments-${post.id}`}
-                        >
-                          <MessageCircle className="w-4 h-4 mr-2" />
-                          {post.comments.length} Comments
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Share2 className="w-4 h-4 mr-2" />
-                          Share
-                        </Button>
-                      </div>
-                      {activeCommentSection === post.id && (
-                        <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2">
-                          {post.comments.map((comment) => (
-                            <div key={comment.id} className="flex items-start gap-2 text-sm">
-                              <Avatar className="w-6 h-6">
-                                <AvatarImage src={`/placeholder.svg?height=24&width=24`} alt={`${comment.user}'s avatar`} />
-                                <AvatarFallback>{comment.user[0]}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <span className="font-semibold">{comment.user}</span>
-                                <span className="ml-2 text-gray-500 text-xs">{comment.timestamp}</span>
-                                <p>{comment.content}</p>
-                              </div>
-                            </div>
-                          ))}
-                          <div className="flex gap-2 mt-2">
-                            <Input
-                              placeholder="Add a comment..."
-                              value={newComment}
-                              onChange={handleNewComment}
-                              aria-label="Add a comment"
-                            />
-                            <Button size="sm" onClick={() => submitComment(post.id)}>
-                              <Send className="w-4 h-4" />
-                              <span className="sr-only">Send comment</span>
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
+            <TabsContent value="posts" className="w-full mx-0">
+                <CreatePost posts={posts} setPosts={setPosts}/>
+                <Posts prop={posts} />
             </TabsContent>
             <TabsContent value="media">
               <Card>

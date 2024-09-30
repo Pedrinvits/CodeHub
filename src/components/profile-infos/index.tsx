@@ -2,6 +2,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { MapPin, LinkIcon, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
+import EditProfile from "../edit-profile";
 
 type ProfileInfosProps = { 
     userProfile : {
@@ -39,7 +40,7 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
                   <h1 className="text-2xl font-bold">{userProfile?.name}</h1>
                   <p className="text-gray-500">{userProfile?.username}</p>
                 </div>
-                <Button>Edit profile</Button>
+                <EditProfile userProfile={userProfile}/>
               </div>
               <p className="mb-4">{userProfile?.bio}</p>
               <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
