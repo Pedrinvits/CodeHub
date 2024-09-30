@@ -36,6 +36,7 @@ export const RegisterForm = () => {
         defaultValues : {
             email : "",
             password : "",
+            username : "",
             name : "",
         }
     })
@@ -94,7 +95,19 @@ export const RegisterForm = () => {
                                 </FormItem>
                             )}
                         />
-
+                        <FormField
+                            control={form.control}
+                            name='username'
+                            render={({field}) => (
+                                <FormItem>
+                                      <FormLabel>Username</FormLabel>
+                                      <FormControl>
+                                        <Input {...field} placeholder='username' type='text'/>
+                                      </FormControl>
+                                      <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                         control={form.control}
                         name='password'
