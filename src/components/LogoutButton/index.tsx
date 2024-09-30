@@ -1,14 +1,19 @@
 'use client'
 
 import { SignOut } from "@/action/SignOut";
+import { LogOutIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
-const ButtonS = () => {
+const LogoutButton = () => {
     const handleLogoutClick = async () => {
         await SignOut();
       };
     return ( 
-        <button onClick={handleLogoutClick}>Sair</button>
+        <Button onClick={handleLogoutClick} className="w-full">
+          <LogOutIcon className="h-5 w-5 mr-2" />
+                Logout
+        </Button>
      );
 }
  
-export default ButtonS;
+export default LogoutButton;

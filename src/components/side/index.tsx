@@ -9,6 +9,7 @@ import { auth } from "../../../auth"
 import { getUserById } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import LogoutButton from "../LogoutButton"
 
 export default async function Component() {
   
@@ -74,10 +75,7 @@ export default async function Component() {
           </aside>
           </nav>
           <div className="mt-auto space-y-2 border-t pt-4">
-            <Button variant="outline" className="w-full">
-                <LogOutIcon className="h-5 w-5 mr-2" />
-                Logout
-            </Button>
+                <LogoutButton/>
                 <div className="w-full flex ">
                 <AccountSettings email={user?.email} name={user?.name} password={user?.password}/>
                 </div>
@@ -151,10 +149,7 @@ export default async function Component() {
                 </aside>
               </nav>
               <div className="mt-auto space-y-2 border-t pt-4">
-                <Button variant="outline" className="w-full">
-                    <LogOutIcon className="h-5 w-5 mr-2" />
-                    Logout
-                </Button>
+                <LogoutButton/>
                 <AccountSettings email={user?.email} name={user?.name} />
                 </div>
             </SheetContent>
