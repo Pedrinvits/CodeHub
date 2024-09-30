@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MountainIcon, SettingsIcon, UserRound, UsersIcon } from "lucide-react"
+import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MessageSquare, MountainIcon, SettingsIcon, UserRound, UsersIcon } from "lucide-react"
 import { ModeToggle } from "../mode-toggle"
 import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
@@ -39,15 +39,15 @@ export default async function Component() {
               Profile
             </Link> 
             <Link
-              href="#"
+              href="/contact"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               prefetch={false}
             >
-              <UsersIcon className="h-4 w-4" />
-              Contact
+              <MessageSquare  className="h-4 w-4" />
+              Feedback
             </Link>
             <aside className="">
-            <h2 className="text-xl font-semibold mb-4">Trending</h2>
+            {/* <h2 className="text-xl font-semibold mb-4">Trending</h2>
             <ul className="space-y-2">
               {[1, 2, 3, 4, 5].map((trend) => (
                 <li key={trend} className="flex items-center gap-2">
@@ -55,7 +55,7 @@ export default async function Component() {
                   <span>Trending Topic {trend}</span>
                 </li>
               ))}
-            </ul>
+            </ul> */}
             <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
             <ul className="space-y-4">
               {[1, 2, 3].map((user) => (
@@ -116,23 +116,23 @@ export default async function Component() {
                   About
                 </Link> 
                 <Link
-                  href="#"
+                  href="/contact"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   prefetch={false}
                 >
-                  <UsersIcon className="h-4 w-4" />
-                  Contact
+                  <MessageSquare  className="h-4 w-4" />
+                  Feedback
                 </Link>
                 <aside className="">
                   <h2 className="text-xl font-semibold mb-4">Trending</h2>
-                  <ul className="space-y-2">
+                  {/* <ul className="space-y-2">
                     {[1, 2, 3, 4, 5].map((trend) => (
                       <li key={trend} className="flex items-center gap-2">
                         <span className="text-sm font-medium text-gray-500">#{trend}</span>
                         <span>Trending Topic {trend}</span>
                       </li>
                     ))}
-                  </ul>
+                  </ul> */}
                   <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
                   <ul className="space-y-4">
                     {[1, 2, 3].map((user) => (
