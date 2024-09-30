@@ -20,3 +20,18 @@ export const RegisterSchema = z.object({
         message : "Name is required"
     })
 })
+
+export const ProfileSchema = z.object({
+    location : z.string().min(6,{
+        message : "Minimum 6 characters required"
+    }),
+    username : z.string().min(6,{
+        message : "Minimum 6 characters required"
+    }),
+    bio : z.string().min(1,{
+        message : "Name is required"
+    }),
+    website : z.string().min(1,{
+        message : "Name is required"
+    })
+})
