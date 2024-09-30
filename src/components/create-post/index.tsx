@@ -4,47 +4,18 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Textarea } from "../ui/textarea";
 import { createpost } from "../../../data/createPost";
+import { Input } from "../ui/input";
+import Posts from "../posts";
 
 type Post = {
     title : string
     description: string
   }
   
-const CreatePost = () => {
-    const samplePosts: Post[] = [
-        {
-          id: 1,
-          user: "Alice Johnson",
-          content: "Just finished a great book! Any recommendations for my next read?",
-          timestamp: "2 hours ago",
-          likes: 24,
-          comments: [
-            { id: 1, user: "Bob Smith", content: "Try 'The Midnight Library'!", timestamp: "1 hour ago" },
-            { id: 2, user: "Carol Davis", content: "I loved 'Project Hail Mary'", timestamp: "30 minutes ago" },
-          ],
-        },
-        {
-          id: 2,
-          user: "David Wilson",
-          content: "Beautiful sunset at the beach today!",
-          timestamp: "4 hours ago",
-          likes: 56,
-          comments: [
-            { id: 3, user: "Eva Brown", content: "Wow, looks amazing!", timestamp: "3 hours ago" },
-          ],
-        },
-        {
-          id: 3,
-          user: "Frank Lee",
-          content: "Just launched my new website! Check it out and let me know what you think.",
-          timestamp: "6 hours ago",
-          likes: 89,
-          comments: [],
-        },
-      ]
-
+const CreatePost = ({Recentposts} : any) => {
+    
 const [newPost, setNewPost] = useState<string>("")
-const [posts, setPosts] = useState<Post[]>(samplePosts)
+const [posts, setPosts] = useState<Post[]>(Recentposts)
 
   const submitNewPost = async () => {
   
@@ -58,20 +29,22 @@ const [posts, setPosts] = useState<Post[]>(samplePosts)
      
       if (insertPost.success){
         // TODO : insert Sucess Toast here
-        setPosts(prevPosts => [newPostObject, ...prevPosts])
-        setNewPost("")
+        setPosts((prevPosts) => [...prevPosts, newPostObject]);
+        setNewPost(""); 
       }
     }
   }
   const handleNewPost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewPost(e.target.value)
   }
+
     return ( 
-        <Card className="w-full max-w-2xl mx-auto mb-6">
+        <div className="flex flex-col">
+          <Card className="w-full max-w-2xl mx-auto mb-6">
           <CardHeader>
             <h2 className="text-lg font-semibold">Create a new post</h2>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             <Textarea
               placeholder="What's on your mind?"
               value={newPost}
@@ -85,6 +58,8 @@ const [posts, setPosts] = useState<Post[]>(samplePosts)
             <Button onClick={submitNewPost}>Post</Button>
           </CardFooter>
         </Card>
+        <Posts prop={posts}/>
+        </div>
      );
 }
  
