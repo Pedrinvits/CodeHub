@@ -46,3 +46,20 @@ export const getUserById = async (id : number) : Promise<UserWithPostsAndComment
         return null
     }
 }
+
+export const getUsers = async () => {
+  try {
+      
+      const recentsUsers = await db.user.findMany({
+        take : 3,
+        orderBy: {
+          id: 'asc',
+        }
+      })
+
+      return recentsUsers;
+
+  }catch(error){
+      return null
+  }
+}

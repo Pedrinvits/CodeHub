@@ -6,7 +6,7 @@ import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MessageSquare, MountainIcon, 
 import { ModeToggle } from "../mode-toggle"
 import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
-import { getUserById } from "../../../data/user"
+import { getUserById, getUsers } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import LogoutButton from "../LogoutButton"
@@ -14,8 +14,15 @@ import LogoutButton from "../LogoutButton"
 export default async function Component() {
   
   const session : any = await auth();
-  const user:any = await  getUserById(parseInt(session?.id))
+  const user:any = await  getUserById(parseInt(session?.id));
   
+  const recentsUsers = await getUsers();
+  
+  const idAndNameList = recentsUsers?.map((user: any) => ({
+    id: user.id,
+    name: user.name
+  }));
+
   return (
     <div className="flex min-h-fit">
       <div className="hidden lg:block border-r w-[16rem]">
@@ -59,13 +66,13 @@ export default async function Component() {
             </ul> */}
             <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
             <ul className="space-y-4">
-              {[1, 2, 3].map((user) => (
-                <li key={user} className="flex items-center gap-2">
+              {idAndNameList?.map((user) => (
+                <li key={user.id} className="flex items-center gap-2">
                   <Avatar>
                     <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
-                    <AvatarFallback>U{user}</AvatarFallback>
+                    <AvatarFallback>U</AvatarFallback>
                   </Avatar>
-                  <span>User {user}</span>
+                  <span>{user.name}</span>
                   <Button variant="outline" size="sm" className="ml-auto">
                     Follow
                   </Button>
@@ -122,7 +129,7 @@ export default async function Component() {
                   Feedback
                 </Link>
                 <aside className="">
-                  <h2 className="text-xl font-semibold mb-4">Trending</h2>
+                  {/* <h2 className="text-xl font-semibold mb-4">Trending</h2> */}
                   {/* <ul className="space-y-2">
                     {[1, 2, 3, 4, 5].map((trend) => (
                       <li key={trend} className="flex items-center gap-2">
@@ -133,18 +140,18 @@ export default async function Component() {
                   </ul> */}
                   <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
                   <ul className="space-y-4">
-                    {[1, 2, 3].map((user) => (
-                      <li key={user} className="flex items-center gap-2">
-                        <Avatar>
-                          <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
-                          <AvatarFallback>U{user}</AvatarFallback>
-                        </Avatar>
-                        <span>User {user}</span>
-                        <Button variant="outline" size="sm" className="ml-auto">
-                          Follow
-                        </Button>
-                      </li>
-                    ))}
+                  {idAndNameList?.map((user) => (
+                    <li key={user.id} className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
+                        <AvatarFallback>U</AvatarFallback>
+                      </Avatar>
+                      <span>{user.name}</span>
+                      <Button variant="outline" size="sm" className="ml-auto">
+                        Follow
+                      </Button>
+                    </li>
+                  ))}
                   </ul>
                 </aside>
               </nav>
