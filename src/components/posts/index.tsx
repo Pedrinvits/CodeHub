@@ -1,18 +1,23 @@
 "use client";
-import { Heart, MessageCircle, Share2, Send } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { deletepost } from "../../../data/deletePost";
 
-const Posts = ({ prop }: any) => {
+const Posts = ( {prop} : any) => {
   const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
+  const [posts, setPosts] = useState<any[]>([]);
 
-  // Use useMemo para evitar recalcular posts toda vez que algo muda, a menos que 'prop' mude
-  const posts = useMemo(() => prop, [prop]);
-
+  useEffect(() => {
+    setPosts(Object.values(prop));
+  }, [prop]);
+ 
+  
   // Memorizar a função para evitar recriação em cada render
   const toggleCommentSection = useCallback((postId: number) => {
     setActiveCommentSection((prevId) => (prevId === postId ? null : postId));
@@ -45,62 +50,104 @@ const Posts = ({ prop }: any) => {
     }
   }, [newComment, posts]);
 
+  const handleEdit = () => {
+    console.log('Edit clicked')
+   
+  }
+
+  const handleRemove = async (post_id : any) => {
+    const res = await deletepost(post_id)
+    if(res.success){
+      const updatedPosts = posts.filter((post: any) => post.id !== post_id); 
+      setPosts(updatedPosts); 
+    }
+  }
+
+  const handleShare = () => {
+    console.log('Share clicked')
+    
+  }
+
   return (
     <div className="space-y-4">
-      {posts?.map((post: any) => (
-        <Card key={post.id} className="w-full max-w-2xl mx-auto">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <Avatar>
-              {/* <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} /> */}
-              {/* <AvatarFallback>{post.user.split(' ').map(n => n[0]).join('')}</AvatarFallback> */}
-            </Avatar>
-            <div>
-              <p className="font-semibold">{post.user}</p>
-              <p className="text-sm text-gray-500">{post.title}</p>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p>{post.description}</p>
-          </CardContent>
-          <CardFooter className="flex flex-col">
-            <div className="flex justify-between w-full">
-              <Button variant="ghost" size="sm">
-                <Heart className="w-4 h-4 mr-2" />
-                {post.likes} Likes
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleCommentSection(post.id)}
-                aria-expanded={activeCommentSection === post.id}
-                aria-controls={`comments-${post.id}`}
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
-            {activeCommentSection === post.id && (
-              <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2">
-                <div className="flex gap-2 mt-2">
-                  <Input
-                    placeholder="Add a comment..."
-                    value={newComment}
-                    onChange={handleNewComment}
-                    aria-label="Add a comment"
-                  />
-                  <Button size="sm" onClick={() => submitComment(post.id)}>
-                    <Send className="w-4 h-4" />
-                    <span className="sr-only">Send comment</span>
-                  </Button>
-                </div>
+        {posts.map((post: any) => (
+          <Card key={post.id} className="w-full max-w-2xl mx-auto">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <div className="flex w-full justify-between">
+                <Avatar>
+                <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} /> 
+                <AvatarFallback>R</AvatarFallback> 
+                </Avatar>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleEdit}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      <span>Edit</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => (handleRemove(post.id))}>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      <span>Remove</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleShare}>
+                      <Share2 className="mr-2 h-4 w-4" />
+                      <span>Share</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-            )}
-          </CardFooter>
-        </Card>
-      ))}
+              <div>
+                <p className="font-semibold">{post.user}</p>
+                <p className="text-sm text-gray-500">{post.title}</p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p>{post.description}</p>
+            </CardContent>
+            <CardFooter className="flex flex-col">
+              <div className="flex justify-between w-full">
+                <Button variant="ghost" size="sm">
+                  <Heart className="w-4 h-4 mr-2" />
+                  {post.likes} Likes
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleCommentSection(post.id)}
+                  aria-expanded={activeCommentSection === post.id}
+                  aria-controls={`comments-${post.id}`}
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+              </div>
+              {activeCommentSection === post.id && (
+                <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2">
+                  <div className="flex gap-2 mt-2">
+                    <Input
+                      placeholder="Add a comment..."
+                      value={newComment}
+                      onChange={handleNewComment}
+                      aria-label="Add a comment"
+                    />
+                    <Button size="sm" onClick={() => submitComment(post.id)}>
+                      <Send className="w-4 h-4" />
+                      <span className="sr-only">Send comment</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </CardFooter>
+          </Card>
+        ))}
     </div>
   );
 };

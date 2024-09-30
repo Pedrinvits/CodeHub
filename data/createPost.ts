@@ -17,7 +17,7 @@ export const createpost = async (
     const authorId = session?.user?.email;
 
     // Obtenção do usuário pelo e-mail
-    const user = await getUserByEmail(authorId);
+    const user = await getUserByEmail(authorId as any);
 
     if (!user) {
       throw new Error('Usuário não encontrado.');
@@ -31,7 +31,10 @@ export const createpost = async (
       },
     });
 
-    return { success: "Informações atualizadas com sucesso!", error: null };
+    // cria o post e depois manda os posts atualizados
+    const updatedPosts = await db.post.findMany()
+
+    return { updatedPosts, success: "Informações atualizadas com sucesso!", error: null };
   } catch (error) {
     console.error('Erro ao atualizar as informações:', error);
     return { success: null, error: "Erro ao atualizar as informações." };
