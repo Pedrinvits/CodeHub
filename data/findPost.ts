@@ -6,11 +6,7 @@ type Post = {
   title: string
   description: string
 }
-export const findposts = async (
-
-  post: Post
-
-) => {
+export const findposts = async () => {
   try {
     // // Autenticação para obter a sessão e o ID do usuário
     const posts = await db.post.findMany();
