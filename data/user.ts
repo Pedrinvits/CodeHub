@@ -37,6 +37,13 @@ export const getUserById = async (id : number) : Promise<UserWithPostsAndComment
                   coments: true, // Inclui os comentários dos posts
                 },
               },
+              _count : {
+                select : {
+                  following : true,
+                  followers : true,
+                  posts : true,
+                }
+              }
             },
           });
 
