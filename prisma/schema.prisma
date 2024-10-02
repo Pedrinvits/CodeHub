@@ -14,17 +14,24 @@ model User {
   location        String?
   website         String?
   joinDate        DateTime @default(now())
-  followers       Int      @default(0)
-  following       Int      @default(0)
   profileImageUrl String?
   coverImageUrl   String?
   email           String?  @unique
   password        String?
   posts           Post[]
-
+  followers       Following[]    @relation("followers") // Seguidores deste usuário
+  following       Following[]    @relation("following") // Usuários que este usuário segue
   @@map("users")
 }
-
+model Following {
+  id            Int      @id @default(autoincrement())
+  followerId    Int
+  followingId   Int
+  createdAt     DateTime @default(now())
+  follower      User     @relation("followers", fields: [followerId], references: [id])
+  following     User     @relation("following", fields: [followingId], references: [id])
+  @@unique([followerId, followingId]) // Garante que um usuário não siga o mesmo usuário mais de uma vez
+}
 model Post {
   id Int @id @default(autoincrement())
   title String
