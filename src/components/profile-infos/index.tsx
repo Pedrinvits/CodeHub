@@ -16,6 +16,10 @@ type ProfileInfosProps = {
         following: number
         profileImageUrl: string
         coverImageUrl: string
+        _count : {
+          following : string,
+          followers : string
+        }
     }
 }
 const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
@@ -28,7 +32,7 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute -bottom-16 left-4">
-                <Avatar className="w-32 h-32 border-4 border-white">
+                <Avatar className="border border-gray-400 rounded-full p-2">
                   <AvatarImage src={userProfile ? userProfile?.coverImageUrl : ''} alt={ userProfile ? userProfile.name : ''} />
                   <AvatarFallback>{userProfile ? userProfile.name.split(' ').map(n => n[0]).join('') : ''}</AvatarFallback>
                 </Avatar>
@@ -60,8 +64,8 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
                 </span>
               </div>
               <div className="flex gap-4 text-sm">
-                <span><strong>{userProfile?.following}</strong> Following</span>
-                <span><strong>{userProfile?.followers}</strong> Followers</span>
+                <span><strong>{userProfile?._count.followers}</strong> Following</span>
+                <span><strong>{userProfile?._count.following}</strong> Follwers</span>
               </div>
             </CardContent>
           </Card>

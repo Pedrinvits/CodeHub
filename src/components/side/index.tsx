@@ -10,18 +10,29 @@ import { getUserById, getUsers } from "../../../data/user"
 import RecentsPosts from "../recentsPosts"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import LogoutButton from "../LogoutButton"
+import FollowButton from "../follow-button"
+import { getUserFollowing } from "../../../data/following/getUserFollowers"
+import SuggestedUsers from "../sugested-users"
 
 export default async function Component() {
   
   const session : any = await auth();
   const user:any = await  getUserById(parseInt(session?.id));
-  
+
   const recentsUsers = await getUsers();
   
   const idAndNameList = recentsUsers?.map((user: any) => ({
     id: user.id,
     name: user.name
   }));
+
+  const CurrentUserfollowings: any = await getUserFollowing(parseInt(session?.id));
+  const ids_users_seguidos = CurrentUserfollowings.map((u: any) => u.id);
+  const idAndNameListWithFollowStatus = idAndNameList?.map((user) => ({
+      ...user,
+      isFollowed: ids_users_seguidos.includes(user.id) 
+  }));
+ 
 
   return (
     <div className="flex min-h-fit">
@@ -64,21 +75,7 @@ export default async function Component() {
                 </li>
               ))}
             </ul> */}
-            <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
-            <ul className="space-y-4">
-              {idAndNameList?.map((user) => (
-                <li key={user.id} className="flex items-center gap-2">
-                  <Avatar>
-                    <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
-                  <span>{user.name}</span>
-                  <Button variant="outline" size="sm" className="ml-auto">
-                    Follow
-                  </Button>
-                </li>
-              ))}
-            </ul>
+            <SuggestedUsers list={idAndNameListWithFollowStatus} current_user_id = {user.id}/>
           </aside>
           </nav>
           <div className="mt-auto space-y-2 border-t pt-4">
