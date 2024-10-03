@@ -1,5 +1,5 @@
 "use client"
-import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight, ChevronRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
@@ -152,7 +152,7 @@ const PostComponent = ({ prop }: any) => {
                 <Heart className="w-4 h-4 mr-2" />
                 {post.likes == null ? 0 : post.likes}
               </Button>
-              <Link href={`/posts/${post.id}`}><MoveRight /></Link>
+              <Link href={`/posts/${post.id}`}><ChevronRight size={17} /></Link>
               {/* <Button
                         variant="ghost"
                         size="sm"
