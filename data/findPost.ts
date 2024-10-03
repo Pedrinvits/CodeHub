@@ -17,3 +17,21 @@ export const findposts = async () => {
     return { success: null, error: "Erro ao atualizar as informações." };
   }
 };
+
+export const findpost = async (
+  post_id : number
+) => {
+  try {
+    // // Autenticação para obter a sessão e o ID do usuário
+    const post = await db.post.findUnique({
+      where : {
+        id : post_id
+      }
+    })
+
+    return { post, error: null };
+
+  } catch (error) {
+    return { success: null, error: "Erro ao atualizar as informações." };
+  }
+};
