@@ -90,7 +90,7 @@ const PostComponent = ({ prop }: any) => {
   return (
     <>
       {posts.map((post: any) => (
-        <Card key={post.id} className="w-full max-w-2xl mx-auto">
+        <Card key={post.id} className="w-full mx-auto">
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex w-full justify-between">
               <Avatar>

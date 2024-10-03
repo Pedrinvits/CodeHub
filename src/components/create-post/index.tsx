@@ -36,7 +36,7 @@ const CreatePost = ({ posts, setPosts }: any) => {
 
   return ( 
     <div className="flex flex-col">
-      <Card className="w-full max-w-2xl mx-auto mb-6">
+      <Card className="w-full mx-auto mb-6">
         <CardHeader>
           <h2 className="text-lg font-semibold">Create a new post</h2>
         </CardHeader>
