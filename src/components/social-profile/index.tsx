@@ -28,51 +28,6 @@ type Comment = {
     comments: Comment[]
   }
   
-  type Profile = {
-    name: string
-    username: string
-    bio: string
-    location: string
-    website: string
-    joinDate: string
-    followers: number
-    following: number
-    profileImageUrl: string
-    coverImageUrl: string
-  }
-  
-  const samplePosts: Post[] = [
-    {
-      id: 1,
-      user: "Alice Johnson",
-      content: "Just finished a great book! Any recommendations for my next read?",
-      timestamp: "2 hours ago",
-      likes: 24,
-      comments: [
-        { id: 1, user: "Bob Smith", content: "Try 'The Midnight Library'!", timestamp: "1 hour ago" },
-        { id: 2, user: "Carol Davis", content: "I loved 'Project Hail Mary'", timestamp: "30 minutes ago" },
-      ],
-    },
-    {
-      id: 2,
-      user: "David Wilson",
-      content: "Beautiful sunset at the beach today!",
-      timestamp: "4 hours ago",
-      likes: 56,
-      comments: [
-        { id: 3, user: "Eva Brown", content: "Wow, looks amazing!", timestamp: "3 hours ago" },
-      ],
-    },
-    {
-      id: 3,
-      user: "Frank Lee",
-      content: "Just launched my new website! Check it out and let me know what you think.",
-      timestamp: "6 hours ago",
-      likes: 89,
-      comments: [],
-    },
-  ]
-  
 const SocialProfile = () => {
     const [posts, setPosts] = useState<Post[]>([])
     const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null)
