@@ -40,6 +40,7 @@ model Post {
   updated_at DateTime @default(now())
   author User @relation(fields: [authorId],references: [id])
   authorId Int
+  likes Int @default(0)
   coments Coment[]
   @@map("posts")
 }
@@ -47,6 +48,7 @@ model Post {
 model Coment {
   id Int @id @default(autoincrement())
   coment String
+  coment_likes Int @default(0)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   post Post @relation(fields: [post_id],references: [id])
