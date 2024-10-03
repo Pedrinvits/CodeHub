@@ -1,3 +1,4 @@
+import GoBackButton from "@/components/GoBackButton";
 import { findpost } from "../../../../../data/findPost";
 import PostComponent from "@/components/post";
 const PostPage = async ({ params }: any) => {
@@ -19,7 +20,10 @@ const PostPage = async ({ params }: any) => {
     return (
         <div className="flex min-h-fit w-full bg-card">
             <main className="flex-1 p-4">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-4xl mx-auto flex flex-col gap-4">
+                    <div className="">
+                        <GoBackButton/>
+                    </div>
                     <PostComponent prop={post} />
                 </div>
             </main>
