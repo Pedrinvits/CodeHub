@@ -1,15 +1,34 @@
 "use server"
 import { db } from "@/lib/db";
 import { auth } from "../auth";
-import { getUserByEmail } from "./user";
-type Post = {
-  title: string
-  description: string
-}
+import { getUserById } from "./user";
+
 export const findposts = async () => {
   try {
-    // // Autenticação para obter a sessão e o ID do usuário
-    const posts = await db.post.findMany();
+    const posts = await db.post.findMany({
+      include: {
+        postLikes: { // Inclui todos os likes
+          include: {
+            user: { // Inclui o usuário que deu o like
+              select: {
+                username: true, // Seleciona o nome do usuário que deu like
+              }
+            }
+          }
+        }, 
+        author: { // Inclui o autor do post
+          select: {
+            username: true,
+          }
+        },
+        _count: {
+          select: {
+            coments: true, 
+            postLikes: true, // Conta a quantidade de likes
+          }
+        }
+      }
+    });     
 
     return { posts, error: null };
 
@@ -22,10 +41,17 @@ export const findpost = async (
   post_id : number
 ) => {
   try {
-    // // Autenticação para obter a sessão e o ID do usuário
+   
     const post = await db.post.findUnique({
       where : {
         id : post_id
+      },
+      include : {
+        _count : {
+          select : {
+            coments : true
+          }
+        }
       }
     })
 
