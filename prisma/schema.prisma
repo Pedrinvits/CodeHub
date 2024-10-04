@@ -6,52 +6,85 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id              Int      @id @default(autoincrement())
-  name            String?  
-  username        String   @unique @default("default_username")
+  id              Int         @id @default(autoincrement())
+  name            String?
+  username        String      @unique @default("default_username")
   bio             String?
   location        String?
   website         String?
-  joinDate        DateTime @default(now())
+  joinDate        DateTime    @default(now())
   profileImageUrl String?
   coverImageUrl   String?
-  email           String?  @unique
+  email           String?     @unique
   password        String?
+  followers       Following[] @relation("followers")
+  following       Following[] @relation("following")
   posts           Post[]
-  followers       Following[]    @relation("followers") // Seguidores deste usuário
-  following       Following[]    @relation("following") // Usuários que este usuário segue
+  commentLikes    CommentLike[] // Relacionamento com os likes em comentários
+
   @@map("users")
+  PostLike PostLike[]
 }
+
 model Following {
-  id            Int      @id @default(autoincrement())
-  followerId    Int
-  followingId   Int
-  createdAt     DateTime @default(now())
-  follower      User     @relation("followers", fields: [followerId], references: [id])
-  following     User     @relation("following", fields: [followingId], references: [id])
-  @@unique([followerId, followingId]) // Garante que um usuário não siga o mesmo usuário mais de uma vez
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+  follower    User     @relation("followers", fields: [followerId], references: [id])
+  following   User     @relation("following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }
+
 model Post {
-  id Int @id @default(autoincrement())
-  title String
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-  author User @relation(fields: [authorId],references: [id])
-  authorId Int
-  likes Int @default(0)
-  coments Coment[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  authorId    Int
+  likes       Int      @default(0)
+  coments     Coment[]
+  author      User     @relation(fields: [authorId], references: [id])
+  postLikes   PostLike[] // Relacionamento com os likes em posts
+
   @@map("posts")
 }
 
-model Coment {
-  id Int @id @default(autoincrement())
-  coment String
-  coment_likes Int @default(0)
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
-  post Post @relation(fields: [post_id],references: [id])
-  post_id Int
+model Coment { // Comentário de um post
+  id           Int          @id @default(autoincrement())
+  coment       String
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @default(now())
+  post_id      Int
+  coment_likes Int          @default(0)
+  post         Post         @relation(fields: [post_id], references: [id])
+  commentLikes CommentLike[] // Relacionamento com os likes em comentários
+
   @@map("comments")
+}
+
+model PostLike { // Relacionamento de like em posts
+  id       Int    @id @default(autoincrement())
+  post     Post   @relation(fields: [postId], references: [id])
+  postId   Int
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
+
+  @@unique([postId, userId]) // Um usuário pode dar like em um post apenas uma vez
+  @@map("post_likes")
+}
+
+model CommentLike { // Relacionamento de like em comentários
+  id        Int     @id @default(autoincrement())
+  coment    Coment  @relation(fields: [comentId], references: [id])
+  comentId  Int
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+
+  @@unique([comentId, userId]) // Um usuário pode dar like em um comentário apenas uma vez
+  @@map("comment_likes")
 }
