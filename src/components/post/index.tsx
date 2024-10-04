@@ -11,53 +11,46 @@ import { Textarea } from "../ui/textarea";
 import { editpost } from "../../../data/editPost";
 import { format } from 'date-fns';
 import Link from "next/link";
+import { updateLikes } from "../../../data/post/update-post-like";
+import { useSession } from "next-auth/react"
 const PostComponent = ({ prop }: any) => {
-
+  const  {data}  = useSession()
+  const current_user_id  = data?.id;
+  
   const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([prop]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [likes, setLikes] = useState<{ [key: number]: number }>({});
+  const [userLikes, setUserLikes] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (Array.isArray(prop)) {
       setPosts(prop);
+      // Inicializa os likes e userLikes
+      const initialLikes: { [key: number]: number } = {};
+      const initialUserLikes: { [key: number]: boolean } = {};
+      
+      prop.forEach((post: any) => {
+        // Define o número de likes por post
+        initialLikes[post.id] = post._count?.postLikes || 0;
+        
+        // Verifica se o usuário atual deu like no post
+        const userHasLiked = post.postLikes.some(
+          (like: any) => like.userId == current_user_id
+          
+        );
+        initialUserLikes[post.id] = userHasLiked;
+      });
+         
+      setLikes(initialLikes);
+      setUserLikes(initialUserLikes);
     }
   }, [prop]);
-
-  const toggleCommentSection = useCallback((postId: number) => {
-    setActiveCommentSection((prevId) => (prevId === postId ? null : postId));
-    setNewComment("");
-  }, []);
-
-  const handleNewComment = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(e.target.value);
-  };
-
-  const submitComment = useCallback((postId: number) => {
-    if (newComment.trim()) {
-      const updatedPosts = posts.map((post: any) =>
-        post.id === postId
-          ? {
-            ...post,
-            comments: [
-              ...post.comments,
-              {
-                id: post.comments.length + 1,
-                user: "Current User",
-                content: newComment.trim(),
-                timestamp: "Just now",
-              },
-            ],
-          }
-          : post
-      );
-      setPosts(updatedPosts);
-      setNewComment("");
-    }
-  }, [newComment, posts]);
-
+  
+  /////////////////////////// Comments Actions ///////////////////////////////////////// 
   const handleEdit = (post: any) => {
     setEditingPostId(post.id);
     setEditedContent(post.description);
@@ -86,17 +79,46 @@ const PostComponent = ({ prop }: any) => {
   const handleShare = () => {
     console.log("Share clicked");
   };
+  /////////////////////////// End Comments Actions /////////////////////////////////////////
+ 
+  const handleLike = async (post_id: string) => {
+    const userLiked = userLikes[Number(post_id)] || false; // Verifica se o usuário já deu like
 
+    try {
+     
+      const response = await updateLikes(Number(post_id), Number(current_user_id)); // Chama a função que já existe
+      
+      // Atualiza o estado de likes
+      setLikes((prevLikes) => ({
+        ...prevLikes,
+        [post_id]: userLiked ? (prevLikes[Number(post_id)] || 0) - 1 : (prevLikes[Number(post_id)] || 0) + 1,
+      }));
+  
+      // // Atualiza o estado de userLikes
+      setUserLikes((prevUserLikes) => ({
+        ...prevUserLikes,
+        [post_id]: !userLiked, // Inverte o estado de like
+      }));
+  
+      // console.log(response); // Mensagem de sucesso
+    } catch (error) {
+      console.error('Erro ao atualizar likes:', error);
+    }
+  };
+    
   return (
     <>
       {posts.map((post: any) => (
         <Card key={post.id} className="w-full mx-auto">
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex w-full justify-between">
-              <Avatar>
-                <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} />
-                <AvatarFallback>R</AvatarFallback>
-              </Avatar>
+              <div className="flex gap-4 items-center justify-center">
+                <Avatar>
+                  <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} />
+                  <AvatarFallback>R</AvatarFallback>
+                </Avatar>
+                <p className="text-sm text-slate-200">{post.author?.username}</p>
+              </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
@@ -146,12 +168,13 @@ const PostComponent = ({ prop }: any) => {
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="flex justify-between w-full">
-              {/* <p>{post.created_at.toString()}</p> */}
               {/* <p className="text-sm text-slate-300">{format(post.created_at,'dd/MM/yyyy')}</p> */}
-              <Button variant="ghost" size="sm">
-                <Heart className="w-4 h-4 mr-2" />
-                {post.likes == null ? 0 : post.likes}
+              <Button variant="ghost" size="sm" onClick={()=>handleLike(post.id)}>
+                {userLikes[post.id] ? <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> : <Heart className="w-4 h-4 mr-2" />}
+                {/* <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> */}
+                <p>{likes[post.id]}</p>
               </Button>
+              <Link href={`/posts/${post.id}`} className="flex items-center justify-center gap-2"><MessageCircle  size={17} />{post._count?.coments}</Link>
               <Link href={`/posts/${post.id}`}><ChevronRight size={17} /></Link>
               {/* <Button
                         variant="ghost"
