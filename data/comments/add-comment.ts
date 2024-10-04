@@ -14,6 +14,13 @@ export const createComments = async (
         post_id : post_id,
         userId : userId, 
       },
+      include : {
+        user : {
+          select : {
+            username : true,
+          }
+        }
+      }
     });
 
     return { comment: newComment, success: "Comentário criado com sucesso!", error: null };
