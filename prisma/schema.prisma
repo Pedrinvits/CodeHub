@@ -23,7 +23,8 @@ model User {
   following       Following[] @relation("following")
   posts           Post[]
   commentLikes    CommentLike[] // Relacionamento com os likes em comentários
-
+  comments        Coment[]    // Relacionamento com os comentários feitos pelo usuário
+  
   @@map("users")
   PostLike PostLike[]
 }
@@ -63,9 +64,12 @@ model Coment { // Comentário de um post
   coment_likes Int          @default(0)
   post         Post         @relation(fields: [post_id], references: [id])
   commentLikes CommentLike[] // Relacionamento com os likes em comentários
+  userId       Int          // Adiciona o campo userId
+  user         User         @relation(fields: [userId], references: [id])
 
   @@map("comments")
 }
+
 
 model PostLike { // Relacionamento de like em posts
   id       Int    @id @default(autoincrement())
