@@ -61,6 +61,17 @@ export const findpost = async (
             username: true,
           },
         },
+        coments: { // Inclui os comentários do post
+          include: {
+            // Inclui o usuário que fez o comentário
+            // Isso assume que você já adicionou a relação no modelo User, como discutido anteriormente.
+            user: { 
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             coments: true,
@@ -69,6 +80,7 @@ export const findpost = async (
         },
       },
     });
+    
     const postconvertedToArray = post ? [post] : [];    
 
     return { postconvertedToArray, error: null };
