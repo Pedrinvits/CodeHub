@@ -13,6 +13,9 @@ import { format } from 'date-fns';
 import Link from "next/link";
 import { updateLikes } from "../../../data/post/update-post-like";
 import { useSession } from "next-auth/react"
+import { createComments } from "../../../data/comments/add-comment";
+import Comment from '@/components/comment'
+
 const PostComponent = ({ prop }: any) => {
   const  {data}  = useSession()
   const current_user_id  = data?.id;
@@ -25,6 +28,9 @@ const PostComponent = ({ prop }: any) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [likes, setLikes] = useState<{ [key: number]: number }>({});
   const [userLikes, setUserLikes] = useState<{ [key: number]: boolean }>({});
+  const [comments, setComments] = useState<{ [key: number]: number }>([]);
+  const [commentCount, setCommentCount] = useState<{ [key: number]: number }>({});
+
 
   useEffect(() => {
     if (Array.isArray(prop)) {
@@ -32,25 +38,102 @@ const PostComponent = ({ prop }: any) => {
       // Inicializa os likes e userLikes
       const initialLikes: { [key: number]: number } = {};
       const initialUserLikes: { [key: number]: boolean } = {};
+      const initialComments = {};
+      const initialcommentCount: { [key: number]: number } = {}; // Corrige aqui
       
       prop.forEach((post: any) => {
         // Define o número de likes por post
         initialLikes[post.id] = post._count?.postLikes || 0;
         
         // Verifica se o usuário atual deu like no post
-        const userHasLiked = post.postLikes.some(
+        const userHasLiked = post.postLikes?.some(
           (like: any) => like.userId == current_user_id
           
         );
         initialUserLikes[post.id] = userHasLiked;
+        initialComments[post.id] = post.coments || [];
+        initialcommentCount[post.id] = initialComments[post.id].length;
+        
       });
+      
          
       setLikes(initialLikes);
       setUserLikes(initialUserLikes);
+      setComments(initialComments);
+      setCommentCount(initialcommentCount)
     }
   }, [prop]);
   
-  /////////////////////////// Comments Actions ///////////////////////////////////////// 
+/////////////////////////// Comment Actions ///////////////////////////////////////// 
+ 
+  const toggleCommentSection = useCallback((postId: number) => {
+    setActiveCommentSection((prevId) => (prevId === postId ? null : postId));
+    setNewComment("");
+  }, []);
+
+  const handleNewComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewComment(e.target.value);
+    
+  };
+
+  const submitComment = 
+  useCallback(
+    async (postId: number, userId: number) => { // Adiciona userId como argumento
+      if (newComment.trim()) {
+        
+        // Aqui você pode chamar a função createComments para criar o comentário no banco
+        const response = await createComments(postId, newComment.trim(), Number(userId));
+  
+        if (response?.success) {
+          const updatedPosts = posts.map((post: any) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  comments: [
+                    ...(post.comments || []), // Garante que post.comments seja um array
+                    {
+                      id: response.comment.id, // Usa o ID do comentário retornado
+                      user: {
+                        id: userId, // ID do usuário que comentou
+                        username: "Current User", // Aqui você pode pegar o nome do usuário logado, se disponível
+                      },
+                      content: newComment.trim(),
+                    },
+                  ],
+                }
+              : post
+          );
+         
+          setPosts(updatedPosts);
+          setNewComment(""); 
+          setCommentCount((prevCount) => ({
+            ...prevCount,
+            [postId]: (prevCount[postId] || 0) + 1, 
+          }));
+          
+        } else {
+          console.error(response); // Exibe o erro, se houver
+        }
+      }
+    },
+    [newComment, posts]
+  );
+  
+  const handleRemoveComment = (postId: number, commentId: string) => {
+    setComments((prevComments) => ({
+      ...prevComments,
+      [postId]: prevComments[postId].filter((comment: any) => comment.id !== commentId),
+    }));    
+    setCommentCount((prevCount) => ({
+      ...prevCount,
+      [postId]: (prevCount[postId] || 0) - 1, 
+    }));
+  };
+
+//////////////////////////////////////////////////////////////////////////////////// 
+
+
+  /////////////////////////// Post Actions ///////////////////////////////////////// 
   const handleEdit = (post: any) => {
     setEditingPostId(post.id);
     setEditedContent(post.description);
@@ -79,7 +162,7 @@ const PostComponent = ({ prop }: any) => {
   const handleShare = () => {
     console.log("Share clicked");
   };
-  /////////////////////////// End Comments Actions /////////////////////////////////////////
+  /////////////////////////// End Post Actions /////////////////////////////////////////
  
   const handleLike = async (post_id: string) => {
     const userLiked = userLikes[Number(post_id)] || false; // Verifica se o usuário já deu like
@@ -105,6 +188,7 @@ const PostComponent = ({ prop }: any) => {
       console.error('Erro ao atualizar likes:', error);
     }
   };
+    // console.log(comments);
     
   return (
     <>
@@ -174,38 +258,57 @@ const PostComponent = ({ prop }: any) => {
                 {/* <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> */}
                 <p>{likes[post.id]}</p>
               </Button>
-              <Link href={`/posts/${post.id}`} className="flex items-center justify-center gap-2"><MessageCircle  size={17} />{post._count?.coments}</Link>
+              <div className="flex items-center justify-center gap-2"><MessageCircle  size={17} />{commentCount[post.id] || 0}</div>
               <Link href={`/posts/${post.id}`}><ChevronRight size={17} /></Link>
-              {/* <Button
+              <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleCommentSection(post.id)}
                         aria-expanded={activeCommentSection === post.id}
                         aria-controls={`comments-${post.id}`}
                     >
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                    </Button> */}
+                        Comentar
+                    </Button>
               {/* <Button variant="ghost" size="sm">
                         <Share2 className="w-4 h-4 mr-2" />
                         Share
                     </Button> */}
             </div>
-            {/* {activeCommentSection === post.id && (
-                    <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2">
-                        <div className="flex gap-2 mt-2">
-                        <Input
-                            placeholder="Add a comment..."
-                            value={newComment}
-                            onChange={handleNewComment}
-                            aria-label="Add a comment"
-                        />
-                        <Button size="sm" onClick={() => submitComment(post.id)}>
-                            <Send className="w-4 h-4" />
-                            <span className="sr-only">Send comment</span>
-                        </Button>
+            {activeCommentSection === post.id && (
+              <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2 ">
+                  <div className="w-full mt-4 space-y-2">
+                   {
+                    Object.entries(comments).map(([postId, comments]) => {
+                      return (
+                        <div key={postId} className="flex flex-col gap-4">
+                          {comments?.map((comment) => (
+                            <Comment 
+                              postId={postId} 
+                              content={comment.coment} 
+                              comment_id={comment.id} 
+                              coment_username={comment.user?.username} 
+                              onRemoveComment={handleRemoveComment}
+                            />
+                          ))}
                         </div>
-                    </div>
-                    )} */}
+                      );
+                    })
+                   }
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                  <Input
+                      placeholder="Add a comment..."
+                      value={newComment}
+                      onChange={handleNewComment}
+                      aria-label="Add a comment"
+                  />
+                  <Button size="sm" onClick={() => submitComment(post.id,current_user_id)}>
+                      <Send className="w-4 h-4" />
+                      <span className="sr-only">Send comment</span>
+                  </Button>
+                  </div>
+              </div>
+              )}
           </CardFooter>
         </Card>
       ))}
