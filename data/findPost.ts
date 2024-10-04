@@ -7,27 +7,38 @@ export const findposts = async () => {
   try {
     const posts = await db.post.findMany({
       include: {
-        postLikes: { // Inclui todos os likes
+        postLikes: {
           include: {
-            user: { // Inclui o usuário que deu o like
+            user: { // Inclui o usuário que deu like
               select: {
-                username: true, // Seleciona o nome do usuário que deu like
-              }
-            }
-          }
-        }, 
+                username: true,
+              },
+            },
+          },
+        },
         author: { // Inclui o autor do post
           select: {
             username: true,
-          }
+          },
+        },
+        coments: { // Inclui os comentários do post
+          include: {
+            // Inclui o usuário que fez o comentário
+            // Isso assume que você já adicionou a relação no modelo User, como discutido anteriormente.
+            user: { 
+              select: {
+                username: true,
+              },
+            },
+          },
         },
         _count: {
           select: {
-            coments: true, 
+            coments: true,
             postLikes: true, // Conta a quantidade de likes
-          }
-        }
-      }
+          },
+        },
+      },
     });     
 
     return { posts, error: null };
