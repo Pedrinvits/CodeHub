@@ -78,37 +78,53 @@ const PostComponent = ({ prop }: any) => {
 
   const submitComment = 
   useCallback(
-    async (postId: number, userId: number) => { // Adiciona userId como argumento
+    async (postId: number, userId: number) => { 
       if (newComment.trim()) {
         
+        
+        // Aqui você pode chamar a função createComments para criar o comentário no banco
+  
         // Aqui você pode chamar a função createComments para criar o comentário no banco
         const response = await createComments(postId, newComment.trim(), Number(userId));
-  
+                // console.log(response);
+                
         if (response?.success) {
+          const newCommentData = {
+            id: response.comment.id,  
+            user: {
+              username: response.comment.user.username,  
+            },
+            coment: newComment.trim(),
+          };
           const updatedPosts = posts.map((post: any) =>
             post.id === postId
               ? {
                   ...post,
                   comments: [
-                    ...(post.comments || []), // Garante que post.comments seja um array
+                    ...(post.comments || []),
                     {
-                      id: response.comment.id, // Usa o ID do comentário retornado
+                      id: response.comment.id, 
                       user: {
-                        id: userId, // ID do usuário que comentou
-                        username: "Current User", // Aqui você pode pegar o nome do usuário logado, se disponível
+                        username: response.comment.user.username, 
                       },
-                      content: newComment.trim(),
+                      coment: newComment.trim(), 
+                      created_at: new Date(), 
+                      // coment_likes: 0,
                     },
                   ],
                 }
               : post
           );
-         
+          
           setPosts(updatedPosts);
           setNewComment(""); 
           setCommentCount((prevCount) => ({
             ...prevCount,
             [postId]: (prevCount[postId] || 0) + 1, 
+          }));
+          setComments((prevComments) => ({
+            ...prevComments,
+            [postId]: [...(prevComments[postId] || []), newCommentData],  
           }));
           
         } else {
