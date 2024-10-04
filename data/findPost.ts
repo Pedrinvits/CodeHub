@@ -43,19 +43,35 @@ export const findpost = async (
   try {
    
     const post = await db.post.findUnique({
-      where : {
-        id : post_id
+      where: {
+        id: post_id, // Ou pode ser baseado no slug, dependendo da estrutura do seu schema
       },
-      include : {
-        _count : {
-          select : {
-            coments : true
-          }
-        }
-      }
-    })
+      include: {
+        postLikes: {
+          include: {
+            user: { // Inclui o usuário que deu like
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
+        author: { // Inclui o autor do post
+          select: {
+            username: true,
+          },
+        },
+        _count: {
+          select: {
+            coments: true,
+            postLikes: true, // Conta a quantidade de likes
+          },
+        },
+      },
+    });
+    const postconvertedToArray = post ? [post] : [];    
 
-    return { post, error: null };
+    return { postconvertedToArray, error: null };
 
   } catch (error) {
     return { success: null, error: "Erro ao atualizar as informações." };

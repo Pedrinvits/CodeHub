@@ -3,9 +3,9 @@ import { findpost } from "../../../../../data/findPost";
 import PostComponent from "@/components/post";
 const PostPage = async ({ params }: any) => {
     const post_id = params.post_id
-    const { post } = await findpost(Number(post_id))
+    const { postconvertedToArray } = await findpost(Number(post_id))
 
-    if (!post) {
+    if (!postconvertedToArray) {
         return (
             <div className="flex min-h-fit w-full bg-card">
                 <main className="flex-1 p-4">
@@ -24,7 +24,7 @@ const PostPage = async ({ params }: any) => {
                     <div className="">
                         <GoBackButton/>
                     </div>
-                    <PostComponent prop={post} />
+                    <PostComponent prop={postconvertedToArray} />
                 </div>
             </main>
         </div>
