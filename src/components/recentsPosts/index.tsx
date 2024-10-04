@@ -18,8 +18,12 @@ const RecentPosts =  () => {
   return (
     <div className="flex min-h-fit bg-card flex-row sm:flex-col">
       <main className="flex-1 p-4">
-        <CreatePost posts={posts} setPosts={setPosts} />
-        <Posts prop={posts} />
+        <div className="max-w-3xl mx-auto">
+          <CreatePost posts={posts} setPosts={setPosts} />
+        </div>
+        <div className="max-w-3xl mx-auto">
+          <Posts prop={posts} />
+        </div>
       </main>
     </div>
   )
