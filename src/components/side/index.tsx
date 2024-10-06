@@ -33,7 +33,7 @@ export default async function Component() {
       isFollowed: ids_users_seguidos.includes(user.id) 
   }));
  
-
+  
   return (
     <div className="flex min-h-fit">
       <div className="hidden lg:block border-r w-[16rem]">
@@ -81,7 +81,7 @@ export default async function Component() {
           <div className="mt-auto space-y-2 border-t pt-4">
                 <LogoutButton/>
                 <div className="w-full flex ">
-                <AccountSettings email={user?.email} name={user?.name} password={user?.password}/>
+                <AccountSettings email={user?.email} name={user?.name} password={user?.password} photo_user_profile={user?.profileImageUrl} />
                 </div>
             </div>
         </div>
@@ -154,7 +154,7 @@ export default async function Component() {
               </nav>
               <div className="mt-auto space-y-2 border-t pt-4">
                 <LogoutButton/>
-                <AccountSettings email={user?.email} name={user?.name} />
+                <AccountSettings email={user?.email} name={user?.name} password={user?.password} photo_user_profile={user?.profileImageUrl} />
                 </div>
             </SheetContent>
           </Sheet>

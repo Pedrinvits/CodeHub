@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Eye, EyeOff, SettingsIcon } from "lucide-react"
-import { useState } from "react"
+import { Eye, EyeOff, SettingsIcon, Upload } from "lucide-react"
+import { ChangeEvent, useState } from "react"
 import { getUserByEmail } from "../../../data/user"
 import { useSession } from "next-auth/react";
 import { updateUserName } from "../../../data/updateUserName"
@@ -16,13 +16,17 @@ import { deleteUser } from "../../../data/deleteUser"
 import { redirect } from 'next/navigation'
 import { updateUserPassword } from "../../../data/updateUserPassword"
 import { toast, useToast } from "@/hooks/use-toast"
+import { useImageUpload } from "@/hooks/useImageUpload";
+import { FormEvent } from "react";
+import { updateUserPhoto } from "../../../data/updateUserPhoto"
+
 interface StatePassword  {
   currentpassword : string;
   newpassword : string;
   confirmpassword : string;
 }
 
-export default function AccountSettings({name,email} : any) {
+export default function AccountSettings({name,email,photo_user_profile} : any) {
   const { toast } = useToast()
   const [selectedOption, setSelectedOption] = useState("profile")
   const [seePassword,SetseePassword] = useState<boolean>(false)
@@ -31,7 +35,10 @@ export default function AccountSettings({name,email} : any) {
     currentpassword : '', newpassword : '', confirmpassword : '' 
   });
   const [deleteWord, setDeleteWord] = useState('');
-
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(photo_user_profile);
+  const { imgURL, progressPorcent, uploadImage } = useImageUpload();
+  
   const handleProfileUpdate = async () => {
     try {
 
@@ -95,6 +102,42 @@ export default function AccountSettings({name,email} : any) {
       console.log(err);
     }
   }
+  const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    // Acessa o campo input[type="file"] corretamente
+    const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0] || null;
+
+    uploadImage(file);
+
+    try {
+        const res = await updateUserPhoto(imgURL)
+ 
+        if (res.success){
+          toast({
+            title: "Foto de perfil alterada com sucesso!",
+          })
+        }
+        
+    }
+    catch(err){
+      console.log(err);
+      
+    }
+    
+};
+const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    setNewPhoto(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+};
   return (
     <>
       <Dialog>
@@ -120,6 +163,13 @@ export default function AccountSettings({name,email} : any) {
               className="w-full justify-start"
             >
               Senha
+            </Button>
+            <Button
+              variant={selectedOption === "photo" ? "secondary" : "ghost"}
+              onClick={() => setSelectedOption("photo")}
+              className="w-full justify-start"
+            >
+              Photo
             </Button>
             <Button
               variant={selectedOption === "delete" ? "secondary" : "ghost"}
@@ -198,6 +248,40 @@ export default function AccountSettings({name,email} : any) {
                     </div>
                   </div>
                 )}
+                {selectedOption === "photo" && (
+                <div id="photo" className="space-y-6">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold">Foto do Perfil</h3>
+                    <p className="text-muted-foreground">Atualize sua foto de perfil</p>
+                  </div>
+                  <div className="flex flex-col items-center gap-4">
+                    <Avatar className="w-32 h-32">
+                      <AvatarImage src={photoPreview} alt={name} />
+                      <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <form onSubmit={handlePhotoSubmit}>
+                      <div className="flex items-center gap-4">
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePhotoChange}
+                            // className="hidden"
+                            id="photo-upload"
+                          />
+                          {/* <Label htmlFor="photo-upload" className="cursor-pointer">
+                            <Button variant="outline" className="gap-2">
+                              <Upload className="h-4 w-4" />
+                              Escolher foto
+                            </Button>
+                          </Label> */}
+                          <Button type="submit" disabled={!newPhoto}>
+                            Salvar foto
+                          </Button>
+                          </div>
+                    </form>
+                  </div>
+                </div>
+              )}
                 {selectedOption === "delete" && (
                   <div id="delete" className="space-y-6">
                     <div className="space-y-2">
