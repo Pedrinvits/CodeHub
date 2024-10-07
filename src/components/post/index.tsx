@@ -28,7 +28,7 @@ const PostComponent = ({ prop }: any) => {
   }
   const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
-  const [posts, setPosts] = useState<any[]>([prop]);
+  const [posts, setPosts] = useState<any[]>(prop || []);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState<EditContentProps | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -187,6 +187,9 @@ const PostComponent = ({ prop }: any) => {
     if (res.success) {
       const updatedPosts = posts.filter((post: any) => post.id !== post_id);
       setPosts(updatedPosts);
+      toast({
+        title : "Post removido com sucesso!"
+      })
     }
   };
 
