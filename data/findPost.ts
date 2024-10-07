@@ -12,6 +12,7 @@ export const findposts = async () => {
             user: { // Inclui o usuário que deu like
               select: {
                 username: true,
+                profileImageUrl : true,
               },
             },
           },
@@ -19,6 +20,7 @@ export const findposts = async () => {
         author: { // Inclui o autor do post
           select: {
             username: true,
+            profileImageUrl : true,
           },
         },
         coments: { // Inclui os comentários do post
@@ -28,6 +30,7 @@ export const findposts = async () => {
             user: { 
               select: {
                 username: true,
+                profileImageUrl : true,
               },
             },
           },
@@ -63,6 +66,7 @@ export const findpost = async (
             user: { // Inclui o usuário que deu like
               select: {
                 username: true,
+                profileImageUrl : true,
               },
             },
           },
@@ -70,6 +74,7 @@ export const findpost = async (
         author: { // Inclui o autor do post
           select: {
             username: true,
+            profileImageUrl : true,
           },
         },
         coments: { // Inclui os comentários do post
@@ -79,6 +84,7 @@ export const findpost = async (
             user: { 
               select: {
                 username: true,
+                profileImageUrl : true,
               },
             },
           },
