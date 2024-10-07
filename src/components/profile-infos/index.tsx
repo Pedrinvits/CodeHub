@@ -3,6 +3,8 @@ import { MapPin, LinkIcon, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import EditProfile from "../edit-profile";
+import Image from "next/image";
+import ChangeCoverPhoto from "../changeCoverPhoto";
 
 type ProfileInfosProps = { 
     userProfile : {
@@ -26,14 +28,20 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
     return ( 
         <Card className="mb-8">
             <div className="relative h-48 bg-foreground">
-              <img
-                src={userProfile ? userProfile?.coverImageUrl : ''}
-                alt="Cover"
+              <Image
+                src={userProfile ? userProfile.coverImageUrl : ''}
+                alt=""
                 className="w-full h-full object-cover"
+                width={0}
+                height={0}
+                unoptimized
               />
+              <div className="absolute top-4 right-4 px-4 py-2">
+                <ChangeCoverPhoto/>
+              </div>
               <div className="absolute -bottom-16 left-4">
-                <Avatar className="border border-gray-400 rounded-full p-2">
-                  <AvatarImage src={userProfile ? userProfile?.coverImageUrl : ''} alt={ userProfile ? userProfile.name : ''} />
+                <Avatar className="rounded-full p-2">
+                  <AvatarImage src={userProfile.profileImageUrl} alt={ userProfile ? userProfile.name : ''} width={100} height={10} className="rounded-full" />
                   <AvatarFallback>{userProfile ? userProfile.name.split(' ').map(n => n[0]).join('') : ''}</AvatarFallback>
                 </Avatar>
               </div>
