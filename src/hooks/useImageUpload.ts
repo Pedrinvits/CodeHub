@@ -5,14 +5,14 @@ import { storage } from '../../firebase/firebase';
 type UseImageUploadReturn = {
   imgURL: string;
   progressPorcent: number;
-  uploadImage: (file: File | null) => void;
+  uploadImage: (file: File | null, callback: (url: string) => void) => void;
 };
 
 export const useImageUpload = (): UseImageUploadReturn => {
   const [imgURL, setImgURL] = useState<string>("");
   const [progressPorcent, setProgressPorcent] = useState<number>(0);
 
-  const uploadImage = (file: File | null): void => {
+  const uploadImage = (file: File | null, callback: (url: string) => void): void => {
     if (!file) return;
 
     const storageRef = ref(storage, `images/${file.name}`);
@@ -32,6 +32,7 @@ export const useImageUpload = (): UseImageUploadReturn => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => {
           setImgURL(downloadURL);
+          callback(downloadURL); // Chama o callback passando a URL da imagem
         });
       }
     );
