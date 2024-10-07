@@ -16,16 +16,21 @@ import { useSession } from "next-auth/react"
 import { createComments } from "../../../data/comments/add-comment";
 import Comment from '@/components/comment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { toast } from "@/hooks/use-toast";
 
 const PostComponent = ({ prop }: any) => {
   const  {data}  = useSession()
   const current_user_id  = data?.id;
   
+  type EditContentProps = {
+      title : string,
+      description : string,
+  }
   const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([prop]);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
-  const [editedContent, setEditedContent] = useState("");
+  const [editedContent, setEditedContent] = useState<EditContentProps | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [likes, setLikes] = useState<{ [key: number]: number }>({});
   const [userLikes, setUserLikes] = useState<{ [key: number]: boolean }>({});
@@ -154,18 +159,26 @@ const PostComponent = ({ prop }: any) => {
   /////////////////////////// Post Actions ///////////////////////////////////////// 
   const handleEdit = (post: any) => {
     setEditingPostId(post.id);
-    setEditedContent(post.description);
+    setEditedContent(
+      {
+        title :  post.title,
+        description : post.description,
+      }
+    )
   };
 
   const handleSave = async (postId: number) => {
-    const res = await editpost(postId, editedContent);
+    const res = await editpost(postId, editedContent?.title, editedContent?.description);
     if (res.success) {
       const updatedPosts = posts.map((post: any) =>
-        post.id === postId ? { ...post, description: editedContent } : post
+        post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,  } : post
       );
+      toast({
+        title : 'Post Editado com sucesso!'
+      })
       setPosts(updatedPosts);
       setEditingPostId(null);
-      setEditedContent("");
+      setEditedContent({title : "",description : ""});
     }
   };
 
@@ -246,26 +259,44 @@ const PostComponent = ({ prop }: any) => {
             </div>
             <div>
               <p className="font-semibold">{post.user}</p>
-              <p className="text-sm text-gray-500">{post.title}</p>
             </div>
           </CardHeader>
           <CardContent>
             {editingPostId === post.id ? (
               <>
-                <Textarea
-                  ref={textareaRef}
-                  placeholder="What's on your mind?"
-                  value={editedContent}
-                  onChange={(e) => setEditedContent(e.target.value)}
-                  rows={3}
-                  className="w-full"
-                />
-                <Button onClick={() => handleSave(post.id)} className="mt-2">
-                  Save Edit
-                </Button>
+                <div className="flex flex-col gap-4">
+                  <Input 
+                    placeholder="title" 
+                    value={editedContent?.title || ""} 
+                    onChange={(e) =>
+                      setEditedContent((prev) => ({
+                        ...prev,                   
+                        title: e.target.value 
+                      }) as EditContentProps)
+                    }
+                    />
+                  <Textarea
+                    placeholder="What's on your mind?"
+                    value={editedContent?.description || ""}
+                    onChange={(e) =>
+                      setEditedContent((prev) => ({
+                        ...prev,                  
+                        description: e.target.value 
+                      }) as EditContentProps)
+                    }
+                    rows={3}
+                    className="w-full"
+                  />
+                  <Button onClick={() => handleSave(post.id)} className="mt-2 max-w-fit">
+                   Save Edit
+                  </Button>
+                </div>
               </>
             ) : (
-              <p>{post.description}</p>
+              <div className="flex flex-col gap-4">
+                <p className="text-xl text-slate-100">{post.title}</p>
+                <p className="text-lg text-slate-300">{post.description}</p>
+              </div>
             )}
           </CardContent>
           <CardFooter className="flex flex-col">
@@ -305,7 +336,7 @@ const PostComponent = ({ prop }: any) => {
                     Object.entries(comments).map(([postId, comments]) => {
                       return (
                         <div key={postId} className="flex flex-col gap-4">
-                          {comments?.map((comment) => (
+                          {comments?.map((comment : any) => (
                             <Comment 
                               postId={postId} 
                               content={comment.coment} 

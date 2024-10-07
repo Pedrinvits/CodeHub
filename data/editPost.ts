@@ -2,13 +2,11 @@
 import { db } from "@/lib/db";
 import { auth } from "../auth";
 import { getUserByEmail } from "./user";
-type Post = {
-  title: string
-  description: string
-}
+
 export const editpost = async (
     post_id: number,
-    newDescription : string
+    title : string,
+    description : string
 ) => {
   try {
     // Autenticação para obter a sessão e o ID do usuário
@@ -26,7 +24,8 @@ export const editpost = async (
         where : {
             id : post_id
         },data : {
-            description : newDescription
+            title,
+            description
         }
     });
 
