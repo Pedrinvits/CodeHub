@@ -80,11 +80,6 @@ const PostComponent = ({ prop }: any) => {
   useCallback(
     async (postId: number, userId: number) => { 
       if (newComment.trim()) {
-        
-        
-        // Aqui você pode chamar a função createComments para criar o comentário no banco
-  
-        // Aqui você pode chamar a função createComments para criar o comentário no banco
         const response = await createComments(postId, newComment.trim(), Number(userId));
                 // console.log(response);
                 
@@ -204,7 +199,7 @@ const PostComponent = ({ prop }: any) => {
       console.error('Erro ao atualizar likes:', error);
     }
   };
-    // console.log(comments);
+    console.log(posts);
     
   return (
     <>
@@ -214,8 +209,8 @@ const PostComponent = ({ prop }: any) => {
             <div className="flex w-full justify-between">
               <div className="flex gap-4 items-center justify-center">
                 <Avatar>
-                  <AvatarImage src={`/placeholder.svg?height=40&width=40`} alt={`${post.user}'s avatar`} />
-                  <AvatarFallback>R</AvatarFallback>
+                  <AvatarImage src={post.author?.profileImageUrl ? post.author?.profileImageUrl : ''} alt={`${post.user}'s avatar`} />
+                  <AvatarFallback>{post.author?.username.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <p className="text-sm text-slate-200">{post.author?.username}</p>
               </div>
@@ -303,6 +298,7 @@ const PostComponent = ({ prop }: any) => {
                               content={comment.coment} 
                               comment_id={comment.id} 
                               coment_username={comment.user?.username} 
+                              coment_profileImageUrl={comment.user?.profileImageUrl} 
                               onRemoveComment={handleRemoveComment}
                             />
                           ))}

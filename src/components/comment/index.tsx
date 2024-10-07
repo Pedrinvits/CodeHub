@@ -6,16 +6,18 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useState } from "react";
 import { deleteComment } from "../../../data/comments/delete-comment";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type commentProps = {
     postId: string;
   content: string;
   coment_username: string;
+  coment_profileImageUrl: string;
   comment_id: string;
   onRemoveComment: (postId: number, commentId: string) => void;
   onAddnewComment?: (postId: number, commentId: string) => void;
 }
-const Comment = ({ postId, content, comment_id, coment_username, onRemoveComment }: commentProps) => {
+const Comment = ({ postId, content, comment_id, coment_username,coment_profileImageUrl, onRemoveComment }: commentProps) => {
     const [editingPostId, setEditingPostId] = useState<number | null>(null);
     const [editedContent, setEditedContent] = useState("");
     
@@ -48,7 +50,13 @@ const Comment = ({ postId, content, comment_id, coment_username, onRemoveComment
     return (
         <Card className="">
             <CardHeader className="flex flex-row justify-between items-center">
-                <p>{coment_username}</p>
+                <div className="flex flex-row gap-4 items-center">
+                    <Avatar>
+                    <AvatarImage src={coment_profileImageUrl ? coment_profileImageUrl : ''} alt={`${coment_username}'s avatar`} />
+                    <AvatarFallback>{coment_username.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <p className="text-sm text-slate-200">{coment_username}</p>
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
