@@ -7,6 +7,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { auth } from "../../auth";
 import { Session_Provider } from "./auth/session-provider";
 import Side from "@/components/side";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <Toaster />
               {children}
             </ThemeProvider>
         </body>
