@@ -15,6 +15,7 @@ import { updateLikes } from "../../../data/post/update-post-like";
 import { useSession } from "next-auth/react"
 import { createComments } from "../../../data/comments/add-comment";
 import Comment from '@/components/comment'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const PostComponent = ({ prop }: any) => {
   const  {data}  = useSession()
@@ -30,10 +31,17 @@ const PostComponent = ({ prop }: any) => {
   const [userLikes, setUserLikes] = useState<{ [key: number]: boolean }>({});
   const [comments, setComments] = useState<{ [key: number]: number }>([]);
   const [commentCount, setCommentCount] = useState<{ [key: number]: number }>({});
-
+  const [canComment, setCanComment] = useState<Boolean>(false);
+  const individualPost = usePathname().startsWith('/posts')
 
   useEffect(() => {
     if (Array.isArray(prop)) {
+        if(individualPost){
+          setCanComment(true);
+        }
+        else {
+          setCanComment(false); 
+        }
       setPosts(prop);
       // Inicializa os likes e userLikes
       const initialLikes: { [key: number]: number } = {};
@@ -81,7 +89,6 @@ const PostComponent = ({ prop }: any) => {
     async (postId: number, userId: number) => { 
       if (newComment.trim()) {
         const response = await createComments(postId, newComment.trim(), Number(userId));
-                // console.log(response);
                 
         if (response?.success) {
           const newCommentData = {
@@ -199,7 +206,7 @@ const PostComponent = ({ prop }: any) => {
       console.error('Erro ao atualizar likes:', error);
     }
   };
-    console.log(posts);
+    // console.log(posts);
     
   return (
     <>
@@ -270,8 +277,10 @@ const PostComponent = ({ prop }: any) => {
                 <p>{likes[post.id]}</p>
               </Button>
               <div className="flex items-center justify-center gap-2"><MessageCircle  size={17} />{commentCount[post.id] || 0}</div>
-              <Link href={`/posts/${post.id}`}><ChevronRight size={17} /></Link>
-              <Button
+              
+              {
+                canComment ?  (
+                  <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleCommentSection(post.id)}
@@ -280,6 +289,10 @@ const PostComponent = ({ prop }: any) => {
                     >
                         Comentar
                     </Button>
+                ) : (
+                      <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><p className="text-sm text-slate-200">Ver post</p><ChevronRight size={17} /></Link>
+                )
+              }
               {/* <Button variant="ghost" size="sm">
                         <Share2 className="w-4 h-4 mr-2" />
                         Share
