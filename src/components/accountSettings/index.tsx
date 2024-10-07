@@ -109,22 +109,13 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
     const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
     const file = fileInput?.files?.[0] || null;
 
-    uploadImage(file);
-
-    try {
-        const res = await updateUserPhoto(imgURL)
- 
-        if (res.success){
-          toast({
-            title: "Foto de perfil alterada com sucesso!",
-          })
-        }
-        
-    }
-    catch(err){
-      console.log(err);
-      
-    }
+    if (file) {
+      uploadImage(file, async (imgURL) => {
+         const res =await updateUserPhoto(imgURL)
+         console.log(res);
+         
+      });
+  }
     
 };
 const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
