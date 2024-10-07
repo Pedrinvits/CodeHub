@@ -9,12 +9,10 @@ import { ProfileSchema } from '../../schemas';
 import { db } from '@/lib/db';
 import { getUserById } from '../../data/user';
 
-export const EditProfileForm = async (values : z.infer<typeof ProfileSchema> ) => {
-
+export const EditProfileForm = async (values: z.infer<typeof ProfileSchema>) => {
     const session = await auth();
     const authorId = session?.id;
 
-    // Obtenção do usuário pelo e-mail
     const user = await getUserById(parseInt(authorId));
 
     if (!user) {
@@ -23,30 +21,30 @@ export const EditProfileForm = async (values : z.infer<typeof ProfileSchema> ) =
     
     const validatedFields = ProfileSchema.safeParse(values);
 
-    if(!validatedFields.success) {
+    if (!validatedFields.success) {
         return {
-            error : "Campos inválidos"
+            error: "Campos inválidos"
         };
     }
 
-    const {location,username,bio,website} = validatedFields.data;
+    const { location, username, bio, website } = validatedFields.data;
+
+    const updateData: any = {};
+
+    if (bio) updateData.bio = bio;
+    if (username) updateData.username = username;
+    if (location) updateData.location = location;
+    if (website) updateData.website = website;
 
     try {
-       
         const updateUserInfos = await db.user.update({
-            where : {
-                id : user.id
-            },data : {
-                bio : bio,
-                username : username,
-                location : location,
-                website : website
-            }
-        })
+            where: { id: user.id },
+            data: updateData // Apenas os campos preenchidos serão atualizados
+        });
         
-        return { sucess : "Sucess!", error : null};
+        return { success: "Success!", error: null };
         
-    }catch(error){
+    } catch (error) {
         throw error;
     }
-}
+};
