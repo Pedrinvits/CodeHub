@@ -32,7 +32,16 @@ export const createpost = async (
     });
 
     // cria o post e depois manda os posts atualizados
-    const updatedPosts = await db.post.findMany()
+    const updatedPosts = await db.post.findMany({
+      include : {
+        author : {
+          select : {
+            username : true,
+            profileImageUrl : true,
+          }
+        }
+      }
+    })
 
     return { updatedPosts, success: "Informações atualizadas com sucesso!", error: null };
   } catch (error) {

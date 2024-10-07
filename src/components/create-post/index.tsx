@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { toast } from "@/hooks/use-toast";
 
 
 type Post = {
@@ -39,7 +40,10 @@ const CreatePost = ({ posts, setPosts }: any) => {
     const insertPost = await createpost(values);
 
       if (insertPost.success) {
-
+        toast({
+          title : "Post criado com sucesso!"
+        })
+        
         setPosts(insertPost.updatedPosts);
         setNewPost(""); 
       }
