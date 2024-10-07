@@ -17,9 +17,7 @@ type Post = {
   description: string
 }
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
+  title: z.string().optional(),
   description: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
@@ -84,9 +82,9 @@ const CreatePost = ({ posts, setPosts }: any) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    {/* <FormLabel>Title</FormLabel> */}
                     <FormControl>
-                      <Input placeholder="title" {...field} />
+                      <Input placeholder="Title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,7 +95,7 @@ const CreatePost = ({ posts, setPosts }: any) => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    {/* <FormLabel>Description</FormLabel> */}
                       <Textarea
                         placeholder="What's on your mind?"
                         rows={3}
