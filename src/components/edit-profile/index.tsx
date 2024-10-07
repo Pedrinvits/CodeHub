@@ -20,6 +20,7 @@ import { useTransition } from 'react'
 import { ProfileSchema } from '../../../schemas'
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "@/hooks/use-toast";
 
 const EditProfile = ({ userProfile }: any) => {
 
@@ -50,6 +51,9 @@ const EditProfile = ({ userProfile }: any) => {
                     SetprofileInfos(values)
                     SetError(data?.error);
                     SetSucess(data?.sucess)
+                    toast({
+                        title: "Informações alteradas com sucesso!",
+                    })
                 })
             SetError("")
             SetSucess("")

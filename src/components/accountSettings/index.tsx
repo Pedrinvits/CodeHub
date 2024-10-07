@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Eye, EyeOff, SettingsIcon, Upload } from "lucide-react"
+import { Eye, EyeOff, Loader2, SettingsIcon, Upload } from "lucide-react"
 import { ChangeEvent, useState } from "react"
 import { getUserByEmail } from "../../../data/user"
 import { useSession } from "next-auth/react";
@@ -38,8 +38,10 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(photo_user_profile);
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
-  
+  const [loading,SetLoading] = useState(false)
+
   const handleProfileUpdate = async () => {
+    SetLoading(true)
     try {
 
       if(userData.name !== name){
@@ -48,10 +50,11 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
         }
         else{
          const result =  await updateUserName(userData.name)
-         toast({
-          title: "Nome alterado com sucesso!",
-          })
-         
+         if(result.success){
+          toast({
+            title: "Nome alterado com sucesso!",
+            })
+         }
         }
       }
 
@@ -60,9 +63,11 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
         return
       }else{
         const result = await updateUserEmail(userData.email)
-        toast({
-          title: "Email alterado com sucesso!",
-          })
+        if(result.success){
+          toast({
+            title: "Email alterado com sucesso!",
+            })
+         }
       }
      }
       
@@ -70,19 +75,28 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
     catch(err){
       console.log(err);
     }
+    finally {
+      SetLoading(false)
+    }
   }
   const handlePasswordUpdate = async () => {
+    SetLoading(true)
     try {
           if(passwordData.newpassword !== passwordData.confirmpassword){
             console.log('Senhas digitadas sao incorretas');
           }
           const result = await updateUserPassword(passwordData.currentpassword, passwordData?.newpassword)
+         if(result.success){
           toast({
             title: "Senha alterada com sucesso!",
-            })
+          })
+         }
     }
     catch(err){
       console.log(err);
+    }
+    finally{
+      SetLoading(false)
     }
   }
   const handleDeleteAccount = async () => {
@@ -92,10 +106,12 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
         
      }else{
         const result = await deleteUser()
+         if(result.success){
           toast({
             title: "Conta excluída com sucesso!",
           })
           redirect('/auth/register')
+         }
      }
     }
     catch(err){
@@ -104,7 +120,7 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
   }
   const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-
+    SetLoading(true);
     // Acessa o campo input[type="file"] corretamente
     const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
     const file = fileInput?.files?.[0] || null;
@@ -112,7 +128,13 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
     if (file) {
       uploadImage(file, async (imgURL) => {
          const res =await updateUserPhoto(imgURL)
-         console.log(res);
+         
+         if(res.success){
+            SetLoading(false)
+            toast({
+              title: "Foto de perfil alterada com sucesso!",
+            })
+         }
          
       });
   }
@@ -194,7 +216,9 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                         onChange={(e) => setUserData({...userData, email:e.target.value})}
                       />
                     </div>
-                    <Button className="w-full" onClick={handleProfileUpdate}>Salvar</Button>
+                      <Button className="w-full" onClick={handleProfileUpdate}>
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar'}
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -235,7 +259,9 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                           onChange={(e) => setpasswordData({...passwordData, confirmpassword:e.target.value})}
                           />
                       </div>
-                      <Button className="w-full" onClick={handlePasswordUpdate}>Trocar Senha</Button>
+                      <Button className="w-full" onClick={handlePasswordUpdate}>
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Trocar Senha'}
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -266,7 +292,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                             </Button>
                           </Label> */}
                           <Button type="submit" disabled={!newPhoto}>
-                            Salvar foto
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar foto'}
                           </Button>
                           </div>
                     </form>
