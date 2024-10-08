@@ -235,7 +235,7 @@ const PostComponent = ({ prop }: any) => {
                   <AvatarImage src={post.author?.profileImageUrl ? post.author?.profileImageUrl : ''} alt={`${post.user}'s avatar`} />
                   <AvatarFallback>{post.author?.username.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <p className="text-sm text-slate-200">{post.author?.username}</p>
+                <Link href={`/profile/${post.author?.username}`} className="hover:underline"><p className="text-sm text-slate-200">{post.author?.username}</p></Link>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

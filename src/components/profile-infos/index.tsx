@@ -29,7 +29,7 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
         <Card className="mb-8">
             <div className="relative h-48 bg-foreground">
               <Image
-                src={userProfile ? userProfile.coverImageUrl : ''}
+                src={userProfile?.coverImageUrl ? userProfile?.coverImageUrl : ''}
                 alt=""
                 className="w-full h-full object-cover"
                 width={0}
@@ -41,8 +41,8 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
               </div>
               <div className="absolute -bottom-16 left-4">
                 <Avatar className="rounded-full p-2">
-                  <AvatarImage src={userProfile.profileImageUrl} alt={ userProfile ? userProfile.name : ''} width={100} height={10} className="rounded-full" />
-                  <AvatarFallback>{userProfile ? userProfile.name.split(' ').map(n => n[0]).join('') : ''}</AvatarFallback>
+                  <AvatarImage src={userProfile?.profileImageUrl ? userProfile.profileImageUrl : ''} alt={ userProfile ? userProfile.name : ''} width={100} height={10} className="rounded-full" />
+                  <AvatarFallback>{userProfile ? userProfile.name.charAt(0) : ''}</AvatarFallback>
                 </Avatar>
               </div>
             </div>

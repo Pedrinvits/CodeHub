@@ -44,7 +44,7 @@ const SocialProfile = () => {
   }, [])
 
   const likedPosts = posts?.filter((post) =>
-    post.postLikes.some((like) => like.userId == current_user_id));
+    post.postLikes?.some((like) => like.userId == current_user_id));
 
   return (
     <Tabs defaultValue="posts" className="mb-8">
