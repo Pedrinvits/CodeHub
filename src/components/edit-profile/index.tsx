@@ -51,9 +51,18 @@ const EditProfile = ({ userProfile }: any) => {
                     SetprofileInfos(values)
                     SetError(data?.error);
                     SetSucess(data?.sucess)
-                    toast({
-                        title: "Informações alteradas com sucesso!",
-                    })
+                    
+                    if(data.success){
+                        toast({
+                            title : 'Informações atualizadas com sucesso!'
+                        })
+                    }
+                    if(data.error) {
+                        toast({
+                            title : data.error,
+                            variant : "destructive"
+                        })
+                    }
                 })
             SetError("")
             SetSucess("")
