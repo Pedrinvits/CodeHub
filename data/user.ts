@@ -54,6 +54,36 @@ export const getUserById = async (id : number) : Promise<UserWithPostsAndComment
     }
 }
 
+export const getUserByUsername = async (username : string) : Promise<UserWithPostsAndComments | null> => {
+  try {
+      
+      const user: UserWithPostsAndComments | null = await db.user.findUnique({
+          where: {
+            username
+          },
+          include: {
+            posts: {
+              include: {
+                coments: true, 
+              },
+            },
+            _count : {
+              select : {
+                following : true,
+                followers : true,
+                posts : true,
+              }
+            }
+          },
+        });
+
+      return user;
+
+  }catch(error){
+      return null
+  }
+}
+
 export const getUsers = async () => {
   try {
       
