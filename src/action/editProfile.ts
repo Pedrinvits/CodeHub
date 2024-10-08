@@ -7,7 +7,7 @@ import { AuthError } from 'next-auth';
 import { auth, signIn } from '../../auth';
 import { ProfileSchema } from '../../schemas';
 import { db } from '@/lib/db';
-import { getUserById } from '../../data/user';
+import { getUserById, getUserByUsername } from '../../data/user';
 
 export const EditProfileForm = async (values: z.infer<typeof ProfileSchema>) => {
     const session = await auth();
@@ -28,6 +28,14 @@ export const EditProfileForm = async (values: z.infer<typeof ProfileSchema>) => 
     }
 
     const { location, username, bio, website } = validatedFields.data;
+
+    const existingUsername = await getUserByUsername(username);
+    
+    if(existingUsername) {
+        return {
+            error : "This username already in use!"
+        };
+    }
 
     const updateData: any = {};
 
