@@ -2,12 +2,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { getUserFollowing } from "../../../data/following/getUserFollowers";
 import FollowButton from "../follow-button";
 import UnfollowButton from "../unfollow-button";
+import Link from "next/link";
 
 type SuggestedUsersProps = {
     list : [
         isFollowed: string,
         id: string,
         name: string,
+        username: string,
+        profileImageUrl : string
     ],
     current_user_id : string
 }
@@ -21,18 +24,24 @@ const SuggestedUsers = async ({ list, current_user_id }: SuggestedUsersProps) =>
                 list
                     ?.filter((listItem: any) => listItem.id !== current_user_id)
                     .map((listItem: any) => (
-                        <li key={listItem.id} className="flex items-center gap-2">
-                            <Avatar>
-                                <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`${listItem.name}'s avatar`} />
-                                <AvatarFallback>U</AvatarFallback>
-                            </Avatar>
-                            <span>{listItem.name}</span>
-                            {listItem.isFollowed ? (
-                                <UnfollowButton followerId={current_user_id} followingId={listItem.id} />
-                            ) : (
-                                <FollowButton followerId={current_user_id} followingId={listItem.id} />
-                            )}
-                        </li>
+                        <Link href={`/profile/${listItem.username}`}>
+                                <li key={listItem.id} className="flex items-center gap-2">
+                                <Avatar className="rounded-full w-14">
+                                    <AvatarImage 
+                                        src={listItem.profileImageUrl ? listItem.profileImageUrl : ''} 
+                                        alt={`${listItem.name}'s avatar`} 
+                                        className="rounded-full"
+                                    />
+                                    <AvatarFallback>{listItem.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <span>{listItem.name}</span>
+                                {listItem.isFollowed ? (
+                                    <UnfollowButton followerId={current_user_id} followingId={listItem.id} />
+                                ) : (
+                                    <FollowButton followerId={current_user_id} followingId={listItem.id} />
+                                )}
+                            </li>
+                        </Link>
                     ))
             ) : (
                 <p className="text-sm text-gray-400">No users found</p>
