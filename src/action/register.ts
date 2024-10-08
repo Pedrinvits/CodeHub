@@ -4,7 +4,7 @@ import * as z from 'zod'
 import { db } from '@/lib/db';
 import * as bcrypt from "bcrypt-ts";
 import { RegisterSchema } from '../../schemas';
-import { getUserByEmail } from '../../data/user';
+import { getUserByEmail, getUserByUsername } from '../../data/user';
 
 export const Register = async (values : z.infer<typeof RegisterSchema> ) => {
 
@@ -22,9 +22,17 @@ export const Register = async (values : z.infer<typeof RegisterSchema> ) => {
 
     const existingUser = await getUserByEmail(email);
 
+    const existingUsername = await getUserByUsername(username);
+
     if(existingUser) {
         return {
             error : "Email already in use!"
+        };
+    }
+
+    if(existingUsername) {
+        return {
+            error : "This username already in use!"
         };
     }
     await db.user.create({
