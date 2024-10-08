@@ -43,7 +43,7 @@ const ChangeCoverPhoto = () => {
 
     return (
         <Dialog>
-            <DialogTrigger><Pen color="black" size={15} /></DialogTrigger>
+            <DialogTrigger><Pen color="white" size={15} /></DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Change your cover photo</DialogTitle>
