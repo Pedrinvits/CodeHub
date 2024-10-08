@@ -23,7 +23,9 @@ export default async function Component() {
   
   const idAndNameList = recentsUsers?.map((user: any) => ({
     id: user.id,
-    name: user.name
+    name: user.name,
+    username: user.username,
+    profileImageUrl: user.profileImageUrl
   }));
 
   const CurrentUserfollowings: any = await getUserFollowing(parseInt(session?.id));
