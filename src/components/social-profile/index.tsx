@@ -54,7 +54,7 @@ const SocialProfile = () => {
         <TabsTrigger value="likes" className="flex-1">Likes</TabsTrigger>
       </TabsList>
       <TabsContent value="posts" className="w-full mx-0">
-        <CreatePost posts={posts} setPosts={setPosts} />
+        {/* <CreatePost posts={posts} setPosts={setPosts} /> */}
         <Posts prop={posts} />
       </TabsContent>
       {/* <TabsContent value="media">
