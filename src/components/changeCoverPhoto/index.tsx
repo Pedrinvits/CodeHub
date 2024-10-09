@@ -1,29 +1,35 @@
 "use client";
-import { Pen } from "lucide-react";
+import { Loader2, Pen } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { updateUserCover } from "../../../data/updateUserCover";
+import { toast } from "@/hooks/use-toast";
 
 const ChangeCoverPhoto = () => {
     const [newPhoto, setNewPhoto] = useState<File | null>(null);
     const [photoPreview, setPhotoPreview] = useState<string | null>('');
     const { imgURL, progressPorcent, uploadImage } = useImageUpload();
+    const [loading,SetLoading] = useState(false)
 
     const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-    
+        SetLoading(true)
+
         const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
         const file = fileInput?.files?.[0] || null;
     
         if (file) {
-            // Chama a função de upload e captura o imgURL no callback
             uploadImage(file, async (imgURL) => {
                const res = await updateUserCover(imgURL)
-               console.log(res);
-               
+               if(res.success){
+                SetLoading(false)
+                toast({
+                    title : 'Foto de fundo alterada com sucesso!'
+                })
+               }
             });
         }
     };    
@@ -56,8 +62,8 @@ const ChangeCoverPhoto = () => {
                                 id="photo-upload"
                             />
                             <Button type="submit" disabled={!newPhoto}>
-                                Save
-                            </Button>
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar foto'}
+                          </Button>
                         </div>
                     </form>
                 </DialogHeader>
