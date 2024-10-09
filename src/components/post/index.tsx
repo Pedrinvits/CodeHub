@@ -1,5 +1,5 @@
 "use client"
-import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight, ChevronRight } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight, ChevronRight, Bookmark } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
@@ -17,8 +17,10 @@ import { createComments } from "../../../data/comments/add-comment";
 import Comment from '@/components/comment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from "@/hooks/use-toast";
+import { updateSavedPosts } from "../../../data/save-post/salvePost";
 
 const PostComponent = ({ prop }: any) => {
+  
   const  {data}  = useSession()
   const current_user_id  = data?.id;
   
@@ -37,7 +39,8 @@ const PostComponent = ({ prop }: any) => {
   const [comments, setComments] = useState<{ [key: number]: number }>([]);
   const [commentCount, setCommentCount] = useState<{ [key: number]: number }>({});
   const [canComment, setCanComment] = useState<Boolean>(false);
-  const individualPost = usePathname().startsWith('/posts')
+  const [postsaved, setSavedPost] = useState<{ [key: number]: boolean }>({});
+  const individualPost = usePathname().startsWith('/posts/')
 
   useEffect(() => {
     if (Array.isArray(prop)) {
@@ -51,6 +54,7 @@ const PostComponent = ({ prop }: any) => {
       // Inicializa os likes e userLikes
       const initialLikes: { [key: number]: number } = {};
       const initialUserLikes: { [key: number]: boolean } = {};
+      const initialUserSaves: { [key: number]: boolean } = {};
       const initialComments = {};
       const initialcommentCount: { [key: number]: number } = {}; // Corrige aqui
       
@@ -63,13 +67,19 @@ const PostComponent = ({ prop }: any) => {
           (like: any) => like.userId == current_user_id
           
         );
+        const userHasSaved = post.savedByUsers?.some(
+          (save: any) => save.userId == current_user_id
+        );
+        // console.log(post);
+        
         initialUserLikes[post.id] = userHasLiked;
+        initialUserSaves[post.id] = userHasSaved;
         initialComments[post.id] = post.coments || [];
         initialcommentCount[post.id] = initialComments[post.id].length;
         
       });
       
-         
+      setSavedPost(initialUserSaves)
       setLikes(initialLikes);
       setUserLikes(initialUserLikes);
       setComments(initialComments);
@@ -193,8 +203,25 @@ const PostComponent = ({ prop }: any) => {
     }
   };
 
-  const handleShare = () => {
-    console.log("Share clicked");
+  const handlePostsave = async (post_id : any) => {
+    const res = await updateSavedPosts(Number(post_id))
+    const userSave = userLikes[Number(post_id)] || false;
+    if(res.success){
+      // toast({
+      //   title : 'Post salvo com suceso!'
+      // })
+
+      // setSavedPost((prev) => ({
+      //   ...prev,
+      //   [post_id]: userSave ? (prev[Number(post_id)] || 0) - 1 : (prev[Number(post_id)] || 0) + 1,
+      // }));
+  
+      setSavedPost((prev) => ({
+        ...prev,
+        [post_id]: !userSave, 
+      }));
+    }
+    
   };
   /////////////////////////// End Post Actions /////////////////////////////////////////
  
@@ -253,9 +280,21 @@ const PostComponent = ({ prop }: any) => {
                     <Trash2 className="mr-2 h-4 w-4" />
                     <span>Remove</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleShare}>
-                    <Share2 className="mr-2 h-4 w-4" />
-                    <span>Share</span>
+                  <DropdownMenuItem onClick={() => handlePostsave(post.id)}>
+                    {
+                      postsaved[post.id] ? 
+                        <>
+                          <Bookmark className="mr-2 h-4 w-4" fill="currentColor" />
+                          <span>Unsave</span>
+                        </>
+                         : 
+                      (
+                        <>
+                          <Bookmark className="mr-2 h-4 w-4" />
+                          <span>Save</span>
+                        </>
+                      )
+                    }
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -304,14 +343,22 @@ const PostComponent = ({ prop }: any) => {
           </CardContent>
           <CardFooter className="flex flex-col">
             <div className="flex justify-between w-full">
-              {/* <p className="text-sm text-slate-300">{format(post.created_at,'dd/MM/yyyy')}</p> */}
-              <Button variant="ghost" size="sm" onClick={()=>handleLike(post.id)}>
-                {userLikes[post.id] ? <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> : <Heart className="w-4 h-4 mr-2" />}
-                {/* <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> */}
-                <p>{likes[post.id]}</p>
-              </Button>
-              <div className="flex items-center justify-center gap-2"><MessageCircle  size={17} />{commentCount[post.id] || 0}</div>
-              
+              <div className="flex gap-4 item-center justify-center">
+                <Button variant="ghost" size="sm" onClick={()=>handleLike(post.id)}>
+                  {userLikes[post.id] ? <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> : <Heart className="w-4 h-4 mr-2" />}
+                  {/* <Heart className="w-4 h-4 mr-2" color={`#ad0026`} /> */}
+                  <p>{likes[post.id]}</p>
+                </Button>
+                <div className="flex items-center justify-center gap-2">
+                  <MessageCircle  size={17} />{commentCount[post.id] || 0}
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <Bookmark className="w-4 h-4 mr-2" /> 2
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  {/* <p className="text-sm text-slate-300">{format(post.created_at,'dd/MM/yyyy')}</p> */}
+                </div>
+              </div>              
               {
                 canComment ?  (
                   <Button
