@@ -13,9 +13,19 @@ export const findposts = async () => {
               select: {
                 username: true,
                 profileImageUrl : true,
+                savedPosts : true,
               },
             },
           },
+        },
+        savedByUsers : {
+          include : {
+            user : {
+              select : { 
+                id : true,
+              }
+            }
+          }
         },
         author: { // Inclui o autor do post
           select: {
@@ -31,6 +41,7 @@ export const findposts = async () => {
               select: {
                 username: true,
                 profileImageUrl : true,
+                savedPosts : true,
               },
             },
           },
