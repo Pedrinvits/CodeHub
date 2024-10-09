@@ -24,7 +24,8 @@ model User {
   posts           Post[]
   commentLikes    CommentLike[] // Relacionamento com os likes em comentários
   comments        Coment[]    // Relacionamento com os comentários feitos pelo usuário
-  
+  savedPosts   SavedPost[]
+
   @@map("users")
   PostLike PostLike[]
 }
@@ -48,9 +49,11 @@ model Post {
   updated_at  DateTime @default(now())
   authorId    Int
   likes       Int      @default(0)
+  saves       Int      @default(0)
   coments     Coment[]
   author      User     @relation(fields: [authorId], references: [id])
   postLikes   PostLike[] // Relacionamento com os likes em posts
+  savedByUsers SavedPost[]
 
   @@map("posts")
 }
@@ -91,4 +94,16 @@ model CommentLike { // Relacionamento de like em comentários
 
   @@unique([comentId, userId]) // Um usuário pode dar like em um comentário apenas uma vez
   @@map("comment_likes")
+}
+
+model SavedPost {
+  id       Int    @id @default(autoincrement())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int
+  post     Post   @relation(fields: [postId], references: [id])
+  postId   Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId]) // Um usuário pode salvar um post apenas uma vez
+  @@map("saved_posts")
 }
