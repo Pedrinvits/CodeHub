@@ -73,7 +73,7 @@ const SocialProfile = () => {
             <h2 className="text-lg font-semibold">Likes</h2>
           </CardHeader>
           <CardContent>
-            <Posts prop={likedPosts} />
+            <PostComponent prop={likedPosts} />
           </CardContent>
         </Card>
       </TabsContent>
