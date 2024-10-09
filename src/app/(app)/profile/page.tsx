@@ -2,6 +2,7 @@ import ProfileInfos from "@/components/profile-infos"
 import SocialProfile from "@/components/social-profile"
 import { auth } from "../../../../auth";
 import { getUserById } from "../../../../data/user";
+import GoBackButton from "@/components/GoBackButton";
 
 type user = {
   name: string
@@ -22,6 +23,9 @@ export default async function SocialNetworkLayout() {
 
   return (
     <div className="flex min-h-fit w-full bg-card">
+      <div className="mt-4 ms-4">
+      <GoBackButton/>
+      </div>
       <main className="flex-1 p-4">
         <div className="max-w-4xl mx-auto">
           <ProfileInfos userProfile={user}/>
