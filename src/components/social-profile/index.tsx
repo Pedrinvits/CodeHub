@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { findposts } from "../../../data/findPost";
-import Posts from "../posts";
 import CreatePost from "../create-post";
 import { useSession } from "next-auth/react"
+import PostComponent from "../post";
 
 type Comment = {
   id: number
@@ -53,9 +53,9 @@ const SocialProfile = () => {
         {/* <TabsTrigger value="media" className="flex-1">Media</TabsTrigger> */}
         <TabsTrigger value="likes" className="flex-1">Likes</TabsTrigger>
       </TabsList>
-      <TabsContent value="posts" className="w-full mx-0">
+      <TabsContent value="posts" className="w-full mx-0 space-y-4">
         {/* <CreatePost posts={posts} setPosts={setPosts} /> */}
-        <Posts prop={posts} />
+        <PostComponent prop={posts}/>
       </TabsContent>
       {/* <TabsContent value="media">
               <Card>

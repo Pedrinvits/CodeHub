@@ -1,10 +1,10 @@
 "use client"
 import { findposts } from "../../../data/findPost"
 import CreatePost from "../create-post"
-import Posts from "../posts"
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Minus, PlusCircle, XCircle } from "lucide-react";
+import PostComponent from "../post";
 
 const RecentPosts =  () => {
   const [posts, setPosts] = useState("");
@@ -41,8 +41,8 @@ const RecentPosts =  () => {
           </Button>
          {showCreatePost && <CreatePost posts={posts} setPosts={setPosts} />}
         </div>
-        <div className="max-w-3xl mx-auto">
-          <Posts prop={posts} />
+        <div className="max-w-3xl mx-auto space-y-4">
+          <PostComponent prop={posts}/>
         </div>
       </main>
     </div>
