@@ -45,31 +45,31 @@ export default function SavedPosts() {
   useEffect(() => {
     const fetchSavedPosts = async () => {
       try {
-        const res = await GetsavedPosts(); 
+        const res = await GetsavedPosts();
         // console.log(res);
-        
+
         // if(res.success){
-          const transformedPosts = res?.savedPosts?.map((e: any) => {       
-    
-            return {
-              id: e.postId,
-              title: e.post.title,
-              description: e.post.description,
-              author: {
-                username: e.post.author.username,
-                profileImageUrl: e.post.author.profileImageUrl,
-              },
-              commentsCount: e.post._count.coments,
-              likesCount:e.post._count.postLikes,
-              createdAt: e.post.created_at,
-            };
-          });
-          // console.log(transformedPosts);
-          
-          
-          setPosts(transformedPosts as any);
+        const transformedPosts = res?.savedPosts?.map((e: any) => {
+
+          return {
+            id: e.postId,
+            title: e.post.title,
+            description: e.post.description,
+            author: {
+              username: e.post.author.username,
+              profileImageUrl: e.post.author.profileImageUrl,
+            },
+            commentsCount: e.post._count.coments,
+            likesCount: e.post._count.postLikes,
+            createdAt: e.post.created_at,
+          };
+        });
+        // console.log(transformedPosts);
+
+
+        setPosts(transformedPosts as any);
         // }
-        
+
       } catch (error) {
         console.error("Error fetching saved posts", error);
       }
@@ -77,22 +77,25 @@ export default function SavedPosts() {
 
     fetchSavedPosts();
   }, []);
-// console.log(posts);
+  // console.log(posts);
 
-if (posts.length == 0) {
-  return (
+  if (posts.length == 0) {
+    return (
       <div className="min-h-fit mx-auto w-3/4 flex flex-col gap-4bg-card">
-          <div className="mt-4">
-          <GoBackButton/>
-          </div>
-          <h1 className="text-2xl font-bold my-10">You do not have saved posts!</h1>
+        <div className="mt-4">
+          <GoBackButton />
+        </div>
+        <h1 className="text-2xl font-bold my-10">You do not have saved posts!</h1>
       </div>
-  )
-}
+    )
+  }
   return (
-      <div className="mx-auto w-3/4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold my-10">Saved posts</h1>
-        <PostComponent prop={posts}/>
+    <div className="mx-auto w-3/4 flex flex-col gap-4">
+      <div className="mt-4">
+        <GoBackButton />
       </div>
+      <h1 className="text-2xl font-bold my-2">Saved posts</h1>
+      <PostComponent prop={posts} />
+    </div>
   );
 }
