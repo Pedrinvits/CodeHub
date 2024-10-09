@@ -34,7 +34,7 @@ const SuggestedUsers = async ({ list, current_user_id }: SuggestedUsersProps) =>
                                     />
                                     <AvatarFallback>{listItem.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <span>{listItem.name}</span>
+                                <span className="text-sm">{listItem.username}</span>
                                 {listItem.isFollowed ? (
                                     <UnfollowButton followerId={current_user_id} followingId={listItem.id} />
                                 ) : (

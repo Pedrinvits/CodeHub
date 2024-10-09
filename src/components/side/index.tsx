@@ -156,21 +156,7 @@ export default async function Component() {
                       </li>
                     ))}
                   </ul> */}
-                  <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
-                  <ul className="space-y-4">
-                  {idAndNameList?.map((user) => (
-                    <li key={user.id} className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={`User ${user}'s avatar`} />
-                        <AvatarFallback>U</AvatarFallback>
-                      </Avatar>
-                      <span>{user.name}</span>
-                      <Button variant="outline" size="sm" className="ml-auto">
-                        Follow
-                      </Button>
-                    </li>
-                  ))}
-                  </ul>
+                  <SuggestedUsers list={idAndNameListWithFollowStatus} current_user_id = {user.id}/>
                 </aside>
               </nav>
               <div className="mt-auto space-y-2 border-t pt-4">
