@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { FileIcon, HomeIcon, LogOutIcon, MenuIcon, MessageSquare, MountainIcon, SettingsIcon, UserRound, UsersIcon } from "lucide-react"
+import { Bookmark, FileIcon, HomeIcon, LogOutIcon, MenuIcon, MessageSquare, MountainIcon, SettingsIcon, UserRound, UsersIcon } from "lucide-react"
 import { ModeToggle } from "../mode-toggle"
 import AccountSettings from "../accountSettings"
 import { auth } from "../../../auth"
@@ -59,6 +59,16 @@ export default async function Component() {
              
               Profile
             </Link> 
+
+            <Link
+              href="/posts-saves"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              prefetch={false}
+            >
+            <Bookmark  className="h-4 w-4"/>
+              Saves
+            </Link> 
+
             <Link
               href="/contact"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -112,12 +122,21 @@ export default async function Component() {
                   Home
                 </Link>
                 <Link
-                  href="#"
+                    href="/profile"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    prefetch={false}
+                  >
+                  <UserRound className="h-4 w-4"/>
+                  
+                    Profile
+                  </Link> 
+                <Link
+                  href="/posts-saves"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   prefetch={false}
                 >
-                  <FileIcon className="h-4 w-4" />
-                  About
+                <Bookmark  className="h-4 w-4"/>
+                  Saves
                 </Link> 
                 <Link
                   href="/contact"
