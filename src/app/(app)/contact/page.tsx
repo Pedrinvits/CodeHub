@@ -22,7 +22,7 @@ export default function FeedbackPage() {
 
   if (submitted) {
     return (
-      <Card className="w-full max-w-md mx-auto mt-10 h-fit">
+      <Card className="w-full max-w-md mx-auto mt-10 h-fit shadow-lg">
         <CardHeader>
           <CardTitle>Thank You!</CardTitle>
           <CardDescription>Your feedback has been submitted successfully!</CardDescription>
@@ -32,7 +32,7 @@ export default function FeedbackPage() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto mt-10 h-fit">
+    <Card className="w-full max-w-md mx-auto mt-10 h-fit shadow-lg">
       <CardHeader>
         <CardTitle>Feedback Form</CardTitle>
         <CardDescription>We value your opinion. Please share your thoughts with us.</CardDescription>

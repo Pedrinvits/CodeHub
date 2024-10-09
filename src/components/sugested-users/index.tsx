@@ -24,7 +24,7 @@ const SuggestedUsers = async ({ list, current_user_id }: SuggestedUsersProps) =>
                 list
                     ?.filter((listItem: any) => listItem.id !== current_user_id)
                     .map((listItem: any) => (
-                        <Link href={`/profile/${listItem.username}`}>
+                        <Link href={`/profile/${listItem.username}`} className="p-2 shadow-lg rounded-md">
                                 <li key={listItem.id} className="flex items-center gap-2">
                                 <Avatar className="rounded-full max-w-12">
                                     <AvatarImage 

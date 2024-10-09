@@ -26,7 +26,7 @@ type ProfileInfosProps = {
 }
 const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
     return ( 
-        <Card className="mb-8">
+        <Card className="mb-8 shadow-lg">
             <div className="relative h-48 bg-foreground">
               <Image
                 src={userProfile?.coverImageUrl ? userProfile?.coverImageUrl : ''}

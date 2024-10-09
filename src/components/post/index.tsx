@@ -254,7 +254,7 @@ const PostComponent = ({ prop }: any) => {
   return (
     <>
       {posts.map((post: any) => (
-        <Card key={post.id} className="w-full mx-auto">
+        <Card key={post.id} className="w-full mx-auto shadow-lg">
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex w-full justify-between">
               <div className="flex gap-4 items-center justify-center">
@@ -262,7 +262,7 @@ const PostComponent = ({ prop }: any) => {
                   <AvatarImage src={post.author?.profileImageUrl ? post.author?.profileImageUrl : ''} alt={`${post.user}'s avatar`} />
                   <AvatarFallback>{post.author?.username.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <Link href={`/profile/${post.author?.username}`} className="hover:underline"><p className="text-sm text-slate-200">{post.author?.username}</p></Link>
+                <Link href={`/profile/${post.author?.username}`} className="hover:underline"><p className="text-sm">{post.author?.username}</p></Link>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -336,8 +336,8 @@ const PostComponent = ({ prop }: any) => {
               </>
             ) : (
               <div className="flex flex-col gap-4">
-                <p className="text-xl text-slate-100">{post.title}</p>
-                <p className="text-lg text-slate-300">{post.description}</p>
+                <p className="text-xl text-primary">{post.title}</p>
+                <p className="text-lg text-muted-foreground">{post.description}</p>
               </div>
             )}
           </CardContent>
@@ -371,7 +371,7 @@ const PostComponent = ({ prop }: any) => {
                         Comentar
                     </Button>
                 ) : (
-                      <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><p className="text-sm text-slate-200">Ver post</p><ChevronRight size={17} /></Link>
+                      <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><p className="text-sm">Ver post</p><ChevronRight size={17} /></Link>
                 )
               }
               {/* <Button variant="ghost" size="sm">
