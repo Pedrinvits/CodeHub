@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GetsavedPosts } from "../../../../data/save-post/getSavePost";
 import PostComponent from "@/components/post";
+import GoBackButton from "@/components/GoBackButton";
 
 
 interface Post {
@@ -78,9 +79,19 @@ export default function SavedPosts() {
   }, []);
 // console.log(posts);
 
+if (posts.length == 0) {
+  return (
+      <div className="min-h-fit mx-auto w-3/4 flex flex-col gap-4bg-card">
+          <div className="mt-4">
+          <GoBackButton/>
+          </div>
+          <h1 className="text-2xl font-bold my-10">You do not have saved posts!</h1>
+      </div>
+  )
+}
   return (
       <div className="mx-auto w-3/4 flex flex-col gap-4">
-      <h1 className="text-2xl font-bold my-10">Posts salvos</h1>
+      <h1 className="text-2xl font-bold my-10">Saved posts</h1>
         <PostComponent prop={posts}/>
       </div>
   );
