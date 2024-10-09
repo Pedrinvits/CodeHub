@@ -19,14 +19,14 @@ const SuggestedUsers = async ({ list, current_user_id }: SuggestedUsersProps) =>
     return (
         <>
             <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
-            <ul className="space-y-4">
+            <ul className="space-y-4 flex flex-col gap-4">
             {list?.filter((listItem: any) => listItem.id !== current_user_id).length > 0 ? (
                 list
                     ?.filter((listItem: any) => listItem.id !== current_user_id)
                     .map((listItem: any) => (
                         <Link href={`/profile/${listItem.username}`}>
                                 <li key={listItem.id} className="flex items-center gap-2">
-                                <Avatar className="rounded-full w-14">
+                                <Avatar className="rounded-full max-w-12">
                                     <AvatarImage 
                                         src={listItem.profileImageUrl ? listItem.profileImageUrl : ''} 
                                         alt={`${listItem.name}'s avatar`} 
