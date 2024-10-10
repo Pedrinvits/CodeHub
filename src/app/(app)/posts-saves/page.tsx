@@ -56,6 +56,7 @@ export default function SavedPosts() {
             title: e.post.title,
             description: e.post.description,
             author: {
+              id : e.post.author.id,
               username: e.post.author.username,
               profileImageUrl: e.post.author.profileImageUrl,
             },
@@ -79,7 +80,7 @@ export default function SavedPosts() {
   }, []);
   // console.log(posts);
 
-  if (posts.length == 0) {
+  if (posts?.length == 0) {
     return (
       <div className="min-h-fit mx-auto w-3/4 flex flex-col gap-4bg-card">
         <div className="mt-4">

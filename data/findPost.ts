@@ -31,6 +31,7 @@ export const findposts = async () => {
           select: {
             username: true,
             profileImageUrl : true,
+            id : true,
           },
         },
         coments: { // Inclui os comentários do post

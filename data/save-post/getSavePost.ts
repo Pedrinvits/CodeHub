@@ -46,6 +46,7 @@ export const GetsavedPosts = async (
             },
             author: {
               select: {
+                id : true,
                 username: true,
                 profileImageUrl: true,
               },

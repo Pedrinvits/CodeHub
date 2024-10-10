@@ -272,14 +272,18 @@ const PostComponent = ({ prop }: any) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => handleEdit(post)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    <span>Edit</span>
-                  </DropdownMenuItem>
+                  {current_user_id == post.author.id && (
+                    <>
+                      <DropdownMenuItem onClick={() => handleEdit(post)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      <span>Edit</span>
+                    </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleRemove(post.id)}>
                     <Trash2 className="mr-2 h-4 w-4" />
                     <span>Remove</span>
                   </DropdownMenuItem>
+                    </>
+                   )}
                   <DropdownMenuItem onClick={() => handlePostsave(post.id)}>
                     {
                       postsaved[post.id] ? 
