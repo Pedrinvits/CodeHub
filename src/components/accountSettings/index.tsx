@@ -157,7 +157,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
       <DialogTrigger asChild className="w-full gap-2">
         <Button variant="outline"><SettingsIcon className="h-5 w-5" />Configurações</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px] max-w-[22rem] ">
+      <DialogContent className="sm:max-w-[800px] max-w-[22rem] rounded-lg">
         <DialogHeader>
           <DialogTitle>Configurações</DialogTitle>
         </DialogHeader>
