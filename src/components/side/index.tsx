@@ -28,7 +28,7 @@ export default async function Component() {
     profileImageUrl: user.profileImageUrl
   }));
 
-  const CurrentUserfollowings: any = await getUserFollowing(parseInt(session?.id));
+  const CurrentUserfollowings: any = await getUserFollowing();
   const ids_users_seguidos = CurrentUserfollowings.map((u: any) => u.id);
   const idAndNameListWithFollowStatus = idAndNameList?.map((user) => ({
       ...user,
