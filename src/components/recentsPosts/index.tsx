@@ -5,21 +5,33 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Minus, PlusCircle } from "lucide-react";
 import PostComponent from "../post";
+import { Tabs , TabsContent, TabsList, TabsTrigger} from "../ui/tabs";
+import { auth } from "../../../auth";
+import { getUserFollowing } from "../../../data/following/getUserFollowers";
 
 const RecentPosts = () => {
-  const [posts, setPosts] = useState<any[]>([]); // Array de posts
+  const [posts, setPosts] = useState<any[]>([]); 
+  const [Followingposts, setFollowingposts  ] = useState<any[]>([]); 
   const [showCreatePost, setShowCreatePost] = useState(false);
-  const [visiblePosts, setVisiblePosts] = useState(3); // Controla a quantidade de posts visíveis
-
+  const [visiblePosts, setVisiblePosts] = useState(3); 
+  
   useEffect(() => {
     const fetchPosts = async () => {
+      const getUserFollowings: any = await getUserFollowing()
+
+      const CurrentUserIdsfollowings = getUserFollowings?.map((e)=>e.id)
+      // console.log(CurrentUserIdsfollowings);
+      
       const samplePosts = await findposts();
-      setPosts(samplePosts.posts as any); // Define os posts
+      const userFollingsPosts =  samplePosts.posts?.filter(e => CurrentUserIdsfollowings.includes(e.authorId))
+      setPosts(samplePosts.posts as any); 
+      setFollowingposts(userFollingsPosts as any); 
     };
     fetchPosts();
   }, []);
 
-
+  // console.log(posts);
+  
   const loadMorePosts = () => {
     setVisiblePosts((prev) => prev + 3); // Carrega mais 3 posts
   };
@@ -49,8 +61,18 @@ const RecentPosts = () => {
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">
-          <PostComponent prop={posts.slice(0, visiblePosts)} />
-          
+        <Tabs defaultValue="feed" className="mb-8">
+        <TabsList className="w-full">
+              <TabsTrigger value="feed" className="flex-1">Feed</TabsTrigger>
+              <TabsTrigger value="following" className="flex-1">Seguindo</TabsTrigger>
+            </TabsList>
+            <TabsContent value="feed" className="w-full mx-0 space-y-4">
+              <PostComponent prop={posts.slice(0, visiblePosts)} />
+              </TabsContent>
+            <TabsContent value="following" className="w-full mx-0 space-y-4">
+              <PostComponent prop={Followingposts.slice(0, visiblePosts)} />
+            </TabsContent>
+          </Tabs>
           <div className="flex justify-center">
             {visiblePosts < posts.length && (
               <Button onClick={loadMorePosts} className="mt-4">
