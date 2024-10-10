@@ -1,5 +1,6 @@
 "use server"
 import { db } from "@/lib/db";
+import { auth } from "../../auth";
 
 
 export const getUserFollowers = async (
@@ -22,13 +23,13 @@ export const getUserFollowers = async (
 
 // Função para Listar Quem o Usuário Está Seguindo
 export const getUserFollowing = async (
-
-    userId: number
-
 ) => {
     try {
+        const session = await auth();
+        const authorId = session?.user?.id;
+
          const following = await db.following.findMany({
-            where: { followerId: userId }, // Aqui, você pode usar followerId se o `userId` for quem está seguindo.
+            where: { followerId: authorId }, // Aqui, você pode usar followerId se o `userId` for quem está seguindo.
             include: {
                 following: true, // Inclui informações dos usuários seguidos
             },
