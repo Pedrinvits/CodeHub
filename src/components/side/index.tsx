@@ -104,6 +104,7 @@ export default async function Component() {
             <MountainIcon className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
+          <div className=""><ModeToggle/></div>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">

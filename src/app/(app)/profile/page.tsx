@@ -23,9 +23,9 @@ export default async function SocialNetworkLayout() {
 
   return (
     <div className="flex min-h-fit w-full bg-card">
-      <div className="mt-4 ms-4">
+      {/* <div className="mt-4 ms-4">
       <GoBackButton/>
-      </div>
+      </div> */}
       <main className="flex-1 p-4">
         <div className="max-w-4xl mx-auto">
           <ProfileInfos userProfile={user}/>
