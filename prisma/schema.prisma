@@ -8,27 +8,36 @@ datasource db {
 }
 
 model User {
-  id              Int         @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   name            String?
-  username        String      @unique @default("default_username")
+  username        String        @unique @default("default_username")
   bio             String?
   location        String?
   website         String?
-  joinDate        DateTime    @default(now())
+  joinDate        DateTime      @default(now())
   profileImageUrl String?
   coverImageUrl   String?
-  email           String?     @unique
+  email           String?       @unique
   password        String?
-  followers       Following[] @relation("followers")
-  following       Following[] @relation("following")
+  followers       Following[]   @relation("followers")
+  following       Following[]   @relation("following")
   posts           Post[]
-  commentLikes    CommentLike[] // Relacionamento com os likes em comentários
-  comments        Coment[]    // Relacionamento com os comentários feitos pelo usuário
-  savedPosts   SavedPost[]
+  commentLikes    CommentLike[] 
+  comments        Coment[]      
+  savedPosts      SavedPost[]   
+  PostLike        PostLike[]   
+  role            Role          @default(USER) 
 
   @@map("users")
-  PostLike PostLike[]
 }
+
+enum Role {
+  USER      
+  MODERATOR 
+  SUPPORT
+  ADMIN     
+}
+
 
 model Following {
   id          Int      @id @default(autoincrement())
