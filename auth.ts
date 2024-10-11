@@ -10,45 +10,45 @@ export const {
     auth,
     signIn,
     signOut,
-  } = NextAuth({
+} = NextAuth({
     providers: [
         Credentials({
-            credentials:{   
-                email:{
+            credentials: {
+                email: {
 
                 },
-                password:{
-                    
+                password: {
+
                 }
             },
             async authorize(credentials, req) {
 
-               const password = credentials.password as string
-               const email = credentials.email as string
+                const password = credentials.password as string
+                const email = credentials.email as string
 
-                if(!email || !password){
+                if (!email || !password) {
                     return null;
                 }
                 // await getUserByEmail(email);
-               const user = await db.user.findUnique({
-                where: {
-                   email : email
-                }
-               })
+                const user = await db.user.findUnique({
+                    where: {
+                        email: email
+                    }
+                })
 
-               if(!user){
+                if (!user) {
                     return null;
-               }
-            
+                }
+
                 const matches = compareSync(password, user.password ?? "")
-              
-               if(matches){
-                    return {id:user.id, email : user.email, name:user.name}
-               }
+
+                if (matches) {
+                    return { id: user.id, email: user.email, name: user.name, role: user.role }
+                }
                 return null;
             }
-        }),    
-    ],callbacks: {
+        }),
+    ], callbacks: {
         async jwt({ token, user }) {
             user && (token.user = user)
             return token
@@ -58,4 +58,4 @@ export const {
             return session
         }
     }
-  });
+});
