@@ -8,6 +8,7 @@ import { auth } from "../../auth";
 import { Session_Provider } from "./auth/session-provider";
 import Side from "@/components/side";
 import { Toaster } from "@/components/ui/toaster";
+import { Navbar } from "@/components/navbar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,9 +26,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth()
-  
+
   return (
-    <Session_Provider  session={session}>
+    <Session_Provider session={session}>
       <html lang="pt-br" suppressHydrationWarning>
         <body
           className={cn(
@@ -35,15 +36,16 @@ export default async function RootLayout({
             fontSans.variable
           )}
         >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Toaster />
-              {children}
-            </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster />
+            <Navbar title={""} />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </Session_Provider>
