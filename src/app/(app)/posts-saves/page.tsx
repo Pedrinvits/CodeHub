@@ -62,7 +62,7 @@ export default function SavedPosts() {
             },
             commentsCount: e.post._count.coments,
             likesCount: e.post._count.postLikes,
-            createdAt: e.post.created_at,
+            created_at: e.post.created_at,
           };
         });
         // console.log(transformedPosts);

@@ -360,7 +360,7 @@ const PostComponent = ({ prop }: any) => {
                   <Bookmark className="w-4 h-4 mr-2" /> {post.saves}
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  {/* <p className="text-sm text-slate-300">{format(post.created_at,'dd/MM/yyyy')}</p> */}
+                  <p className="text-sm text-slate-400 font-mb">{format(post.created_at,'dd/MM/yyyy')}</p>
                 </div>
               </div>              
               {
