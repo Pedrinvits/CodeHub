@@ -357,7 +357,7 @@ const PostComponent = ({ prop }: any) => {
                   <MessageCircle  size={17} />{commentCount[post.id] || 0}
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <Bookmark className="w-4 h-4 mr-2" /> 2
+                  <Bookmark className="w-4 h-4 mr-2" /> {post.saves}
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   {/* <p className="text-sm text-slate-300">{format(post.created_at,'dd/MM/yyyy')}</p> */}
