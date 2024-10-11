@@ -375,7 +375,7 @@ const PostComponent = ({ prop }: any) => {
                         Comentar
                     </Button>
                 ) : (
-                      <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><p className="text-sm">Ver post</p><ChevronRight size={17} /></Link>
+                      <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><p className="text-sm hover:underline">View</p><ChevronRight size={17} /></Link>
                 )
               }
               {/* <Button variant="ghost" size="sm">
