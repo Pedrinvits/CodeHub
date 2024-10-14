@@ -5,7 +5,9 @@ import {
     Bookmark,
     SquarePen,
     LayoutGrid,
-    LucideIcon
+    LucideIcon,
+    UserRound,
+    MessageSquare
 } from "lucide-react";
 
 type Submenu = {
@@ -33,8 +35,8 @@ export function getMenuList(pathname: string): Group[] {
             groupLabel: "",
             menus: [
                 {
-                    href: "/dashboard",
-                    label: "Dashboard",
+                    href: "/",
+                    label: "Feed",
                     icon: LayoutGrid,
                     submenus: []
                 }
@@ -43,47 +45,52 @@ export function getMenuList(pathname: string): Group[] {
         {
             groupLabel: "Contents",
             menus: [
+                // {
+                //     href: "",
+                //     label: "Posts",
+                //     icon: SquarePen,
+                //     submenus: [
+                //         {
+                //             href: "/posts",
+                //             label: "All Posts"
+                //         },
+                //         {
+                //             href: "/posts/new",
+                //             label: "New Post"
+                //         }
+                //     ]
+                // },
                 {
-                    href: "",
-                    label: "Posts",
-                    icon: SquarePen,
-                    submenus: [
-                        {
-                            href: "/posts",
-                            label: "All Posts"
-                        },
-                        {
-                            href: "/posts/new",
-                            label: "New Post"
-                        }
-                    ]
+                    href: "/profile",
+                    label: "Profile",
+                    icon: UserRound
                 },
                 {
-                    href: "/categories",
-                    label: "Categories",
+                    href: "/posts-saves",
+                    label: "Saves",
                     icon: Bookmark
                 },
                 {
-                    href: "/tags",
-                    label: "Tags",
-                    icon: Tag
+                    href: "/contact",
+                    label: "Feedback",
+                    icon: MessageSquare
                 }
             ]
         },
-        {
-            groupLabel: "Settings",
-            menus: [
-                {
-                    href: "/users",
-                    label: "Users",
-                    icon: Users
-                },
-                {
-                    href: "/account",
-                    label: "Account",
-                    icon: Settings
-                }
-            ]
-        }
+        // {
+        //     groupLabel: "Settings",
+        //     menus: [
+        //         {
+        //             href: "/users",
+        //             label: "Users",
+        //             icon: Users
+        //         },
+        //         {
+        //             href: "/account",
+        //             label: "Account",
+        //             icon: Settings
+        //         }
+        //     ]
+        // }
     ];
 }
