@@ -39,7 +39,7 @@ export function UserNav({ username, email, profileImageUrl }: UserNavProps) {
                             >
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src={profileImageUrl} alt="Avatar" />
-                                    <AvatarFallback className="bg-transparent">{username.charAt(0)}</AvatarFallback>
+                                    <AvatarFallback className="bg-transparent">{username?.charAt(0)}</AvatarFallback>
                                 </Avatar>
                             </Button>
                         </DropdownMenuTrigger>

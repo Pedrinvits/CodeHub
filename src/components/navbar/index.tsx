@@ -10,9 +10,9 @@ interface NavbarProps {
 }
 
 export async function Navbar({ title }: NavbarProps) {
-    const { id }: any = await auth()
+    const data: any = await auth()
 
-    const { username, email, profileImageUrl }: any = await getUserById(Number(id))
+    const user = await getUserById(Number(data?.id));
 
     return (
         <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
@@ -23,7 +23,7 @@ export async function Navbar({ title }: NavbarProps) {
                 </div>
                 <div className="flex flex-1 items-center justify-end gap-4">
                     <ModeToggle />
-                    <UserNav username={username} email={email} profileImageUrl={profileImageUrl} />
+                    <UserNav username={user?.username} email={user?.email} profileImageUrl={user?.profileImageUrl} />
                 </div>
             </div>
         </header>
