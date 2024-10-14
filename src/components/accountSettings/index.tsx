@@ -19,14 +19,20 @@ import { toast, useToast } from "@/hooks/use-toast"
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { FormEvent } from "react";
 import { updateUserPhoto } from "../../../data/updateUserPhoto"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
 interface StatePassword  {
   currentpassword : string;
   newpassword : string;
   confirmpassword : string;
 }
+interface AccountSettingsProps {
+    name : string,
+    email : string,
+    photo_user_profile : string,
+}
+export default function AccountSettings({name,email,photo_user_profile} : AccountSettingsProps) {
 
-export default function AccountSettings({name,email,photo_user_profile} : any) {
   const { toast } = useToast()
   const [selectedOption, setSelectedOption] = useState("profile")
   const [seePassword,SetseePassword] = useState<boolean>(false)
@@ -39,7 +45,9 @@ export default function AccountSettings({name,email,photo_user_profile} : any) {
   const [photoPreview, setPhotoPreview] = useState<string | null>(photo_user_profile);
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
   const [loading,SetLoading] = useState(false)
-
+  // console.log(props);
+  console.log(photoPreview);
+  
   const handleProfileUpdate = async () => {
     SetLoading(true)
     try {
@@ -153,16 +161,17 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
 };
   return (
     <>
-      <Dialog>
-      <DialogTrigger asChild className="w-full gap-2">
+      <Card>
+      {/* <DialogTrigger asChild className="w-full gap-2">
         <Button variant="outline"><SettingsIcon className="h-5 w-5" />Configurações</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px] max-w-[22rem] rounded-lg">
-        <DialogHeader>
-          <DialogTitle>Configurações</DialogTitle>
-        </DialogHeader>
-        <div className="sm:grid sm:grid-cols-[200px_1fr] sm:gap-6 sm:p-6 ">
-          <div className="space-y-2 border-r pr-6 ">
+      </DialogTrigger> */}
+      <CardContent >
+        {/* <CardHeader>
+          <CardTitle>Configurações</CardTitle>
+        </CardHeader> */}
+        {/* <div className="sm:grid sm:grid-cols-[200px_1fr] sm:gap-6 sm:p-6 "> */}
+        <div className="flex sm:flex-row flex-col gap-4">
+          <div className="space-y-2 sm:border-r  p-2 sm:w-fit w-full mt-4">
             <Button
               variant={selectedOption === "profile" ? "secondary" : "ghost"}
               onClick={() => setSelectedOption("profile")}
@@ -184,15 +193,15 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
             >
               Photo
             </Button>
-            <Button
+            {/* <Button
               variant={selectedOption === "delete" ? "secondary" : "ghost"}
               onClick={() => setSelectedOption("delete")}
               className="w-full justify-start"
             >
               Deletar
-            </Button>
+            </Button> */}
           </div>
-          <div className="space-y-4 mt-4">
+          <div className="space-y-4 sm:mt-4 border-t sm:border-none pt-4">
             {selectedOption === "profile" && (
                   <div id="profile" className="space-y-6">
                   <div className="space-y-2">
@@ -299,7 +308,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                   </div>
                 </div>
               )}
-                {selectedOption === "delete" && (
+                {/* {selectedOption === "delete" && (
                   <div id="delete" className="space-y-6">
                     <div className="space-y-2">
                       <h3 className="text-lg font-semibold text-red-500">Deletar Conta</h3>
@@ -319,12 +328,12 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                       </Button>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               
         </div>
-      </DialogContent>
-      </Dialog>
+      </CardContent>
+     </Card>
     </>
   )
 }
