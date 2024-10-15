@@ -6,7 +6,8 @@ import { getUserByEmail } from "./user";
 export const editpost = async (
     post_id: number,
     title : string,
-    description : string
+    description : string,
+    imageUrl : string
 ) => {
   try {
     // Autenticação para obter a sessão e o ID do usuário
@@ -25,7 +26,8 @@ export const editpost = async (
             id : post_id
         },data : {
             title,
-            description
+            description,
+            imageUrl
         }
     });
 

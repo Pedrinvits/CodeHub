@@ -5,6 +5,7 @@ import { getUserByEmail } from "./user";
 type Post = {
   title: string
   description: string
+  imgURL: string
 }
 export const createpost = async (
 
@@ -22,16 +23,16 @@ export const createpost = async (
     if (!user) {
       throw new Error('Usuário não encontrado.');
     }
-
-    const createPost = await db.post.create({
+    
+    await db.post.create({
       data: {
         authorId: user.id,
-        title: post.title,
-        description: post.description
+        title : post.title,
+        description : post.description,
+        imageUrl : post.imgURL
       },
     });
-
-    // cria o post e depois manda os posts atualizados
+    // console.log(res);
     const updatedPosts = await db.post.findMany({
       include : {
         author : {
@@ -43,7 +44,7 @@ export const createpost = async (
       }
     })
 
-    return { updatedPosts, success: "Informações atualizadas com sucesso!", error: null };
+    return { updatedPosts, success: "Post criado com sucesso!", error: null };
   } catch (error) {
     console.error('Erro ao atualizar as informações:', error);
     return { success: null, error: "Erro ao atualizar as informações." };
