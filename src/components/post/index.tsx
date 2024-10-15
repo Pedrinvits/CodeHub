@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { deletepost } from "../../../data/deletePost";
 import { Textarea } from "../ui/textarea";
@@ -18,6 +18,8 @@ import Comment from '@/components/comment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from "@/hooks/use-toast";
 import { updateSavedPosts } from "../../../data/save-post/salvePost";
+import Image from "next/image";
+import { useImageUpload } from "@/hooks/useImageUpload";
 
 const PostComponent = ({ prop }: any) => {
   
@@ -27,6 +29,7 @@ const PostComponent = ({ prop }: any) => {
   type EditContentProps = {
       title : string,
       description : string,
+      imageUrl : string,
   }
   const [activeCommentSection, setActiveCommentSection] = useState<number | null>(null);
   const [newComment, setNewComment] = useState<string>("");
@@ -40,6 +43,10 @@ const PostComponent = ({ prop }: any) => {
   const [commentCount, setCommentCount] = useState<{ [key: number]: number }>({});
   const [canComment, setCanComment] = useState<Boolean>(false);
   const [postsaved, setSavedPost] = useState<{ [key: number]: boolean }>({});
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>("");
+  const { imgURL, progressPorcent, uploadImage } = useImageUpload();
+  
   const individualPost = usePathname().startsWith('/posts/')
 
   useEffect(() => {
@@ -142,7 +149,7 @@ const PostComponent = ({ prop }: any) => {
           setComments((prevComments) => ({
             ...prevComments,
             [postId]: [...(prevComments[postId] || []), newCommentData],  
-          }));
+          }) as any);
           
         } else {
           console.error(response); // Exibe o erro, se houver
@@ -173,22 +180,56 @@ const PostComponent = ({ prop }: any) => {
       {
         title :  post.title,
         description : post.description,
+        imageUrl: post.imageUrl || null,
       }
     )
   };
 
+const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    setNewPhoto(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoPreview(reader.result as string);
+      setEditedContent((prev) => ({
+        ...prev,
+        image: imgURL,
+      }) as any);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+  event.preventDefault();
+  // SetLoading(true)
+
+  const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+  const file = fileInput?.files?.[0] || null;
+
+  if (file) {
+      uploadImage(file, async (imgURL) => {
+        // console.log(imgURL);
+      });
+  }
+}; 
   const handleSave = async (postId: number) => {
-    const res = await editpost(postId, editedContent?.title, editedContent?.description);
+    handlePhotoSubmit(event)
+    console.log(editedContent);
+    
+    const res = await editpost(postId, editedContent?.title, editedContent?.description, editedContent?.image);
+    console.log(res);
+    
     if (res.success) {
       const updatedPosts = posts.map((post: any) =>
-        post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,  } : post
+        post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,imageUrl:editedContent?.imageUrl  } : post
       );
       toast({
         title : 'Post Editado com sucesso!'
       })
       setPosts(updatedPosts);
       setEditingPostId(null);
-      setEditedContent({title : "",description : ""});
+      setEditedContent({title : "",description : "", imageUrl: ""});
     }
   };
 
@@ -201,6 +242,12 @@ const PostComponent = ({ prop }: any) => {
         title : "Post removido com sucesso!"
       })
     }
+  };
+  const handleRemoveImage = () => {
+    setEditedContent((prev) => ({
+      ...prev,
+      imageUrl: null,
+    }) as any);
   };
 
   const handlePostsave = async (post_id : any) => {
@@ -333,6 +380,21 @@ const PostComponent = ({ prop }: any) => {
                     rows={3}
                     className="w-full"
                   />
+                  
+                  {editedContent?.imageUrl ? (
+                    <>
+                      <Image src={post?.imageUrl} alt="foto post" width={0} height={0} className="w-full"  unoptimized/>
+                      <Button onClick={handleRemoveImage}>Remover Imagem</Button>
+                    </>
+                  ) : (
+                    <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        // className="hidden"
+                        id="photo-upload"
+                      />
+                  )}
                   <Button onClick={() => handleSave(post.id)} className="mt-2 max-w-fit">
                    Save Edit
                   </Button>
@@ -342,6 +404,9 @@ const PostComponent = ({ prop }: any) => {
               <div className="flex flex-col gap-4">
                 <p className="text-xl text-primary">{post.title}</p>
                 <p className="text-lg text-muted-foreground">{post.description}</p>
+                {post?.imageUrl && (
+                  <Image src={post?.imageUrl} alt="foto post" width={0} height={0} className="w-full"  unoptimized/>
+                )}
               </div>
             )}
           </CardContent>

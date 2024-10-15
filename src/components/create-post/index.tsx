@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Textarea } from "../ui/textarea";
@@ -10,19 +10,43 @@ import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { toast } from "@/hooks/use-toast";
+import { useImageUpload } from "@/hooks/useImageUpload";
 
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = [
+ 'image/jpeg',
+ 'image/jpg',
+ 'image/png',
+ 'image/webp',
+]
 
 type Post = {
   title: string
   description: string
 }
+
 const formSchema = z.object({
   title: z.string().optional(),
   description: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  // image: z
+  // .any()
+  // .refine((files) => files?.length >= 1, { message: 'Image is required.' })
+  // .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+  //   message: '.jpg, .jpeg, .png and .webp files are accepted.',
+  //  })
+  // .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+  //   message: `Max file size is 5MB.`,
+  //  }),
 })
+
+
+
 const CreatePost = ({ posts, setPosts }: any) => {
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>("");
+  const { imgURL, progressPorcent, uploadImage } = useImageUpload();
 
   const [newPost, setNewPost] = useState<string>("");
 
@@ -31,12 +55,48 @@ const CreatePost = ({ posts, setPosts }: any) => {
     defaultValues: {
       title: "",
       description : "",
+      // image : ""
     },
   })
+  const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setNewPhoto(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    // SetLoading(true)
 
+    const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0] || null;
+
+    if (file) {
+        uploadImage(file, async (imgURL) => {
+          // console.log(imgURL);
+          
+        });
+    }
+  }; 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const insertPost = await createpost(values);
-
+    handlePhotoSubmit(event)
+    // console.log(values);
+    // console.log('imgURL ==>',imgURL);
+    const createPostValues = {
+      title : values.title,
+      description : values.description,
+      imgURL,
+    }
+    console.log(createPostValues);
+    
+    const insertPost = await createpost(createPostValues);
+      console.log(insertPost);
+      
       if (insertPost.success) {
         toast({
           title : "Post criado com sucesso!"
@@ -47,26 +107,26 @@ const CreatePost = ({ posts, setPosts }: any) => {
       }
   }
 
-  const submitNewPost = async () => {
-    if (newPost.trim()) {
-      const newPostObject: Post = {
-        title: "", 
-        description: newPost.trim()
-      };
+  // const submitNewPost = async () => {
+  //   if (newPost.trim()) {
+  //     const newPostObject: Post = {
+  //       title: "", 
+  //       description: newPost.trim()
+  //     };
 
-      const insertPost = await createpost(newPostObject);
+  //     const insertPost = await createpost(newPostObject);
 
-      if (insertPost.success) {
+  //     if (insertPost.success) {
 
-        setPosts(insertPost.updatedPosts);
-        setNewPost(""); 
-      }
-    }
-  }
+  //       setPosts(insertPost.updatedPosts);
+  //       setNewPost(""); 
+  //     }
+  //   }
+  // }
 
-  const handleNewPost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewPost(e.target.value);
-  }
+  // const handleNewPost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setNewPost(e.target.value);
+  // }
 
   return ( 
     <div className="flex flex-col">
@@ -101,6 +161,22 @@ const CreatePost = ({ posts, setPosts }: any) => {
                         rows={3}
                         className="w-full"
                         {...field}
+                      />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        // className="hidden"
+                        id="photo-upload"
                       />
                     <FormMessage />
                   </FormItem>
