@@ -52,8 +52,9 @@ model Following {
 
 model Post {
   id          Int      @id @default(autoincrement())
-  title       String
+  title       String?
   description String
+  imageUrl    String?
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
   authorId    Int
