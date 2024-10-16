@@ -1,5 +1,5 @@
 "use client"
-import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight, ChevronRight, Bookmark } from "lucide-react";
+import { Heart, MessageCircle, Share2, Send, EllipsisVertical, MoreVertical, Edit, Trash2, MoveRight, ChevronRight, Bookmark, X, ImagePlus, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
@@ -20,6 +20,7 @@ import { toast } from "@/hooks/use-toast";
 import { updateSavedPosts } from "../../../data/save-post/salvePost";
 import Image from "next/image";
 import { useImageUpload } from "@/hooks/useImageUpload";
+import { Label } from "../ui/label";
 
 const PostComponent = ({ prop }: any) => {
   
@@ -45,6 +46,8 @@ const PostComponent = ({ prop }: any) => {
   const [postsaved, setSavedPost] = useState<{ [key: number]: boolean }>({});
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>("");
+  const [loading,SetLoading] = useState(false)
+
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
   
   const individualPost = usePathname().startsWith('/posts/')
@@ -214,22 +217,40 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
   }
 }; 
   const handleSave = async (postId: number) => {
-    handlePhotoSubmit(event)
-    console.log(editedContent);
-    
-    const res = await editpost(postId, editedContent?.title, editedContent?.description, editedContent?.image);
-    console.log(res);
-    
-    if (res.success) {
-      const updatedPosts = posts.map((post: any) =>
-        post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,imageUrl:editedContent?.imageUrl  } : post
-      );
-      toast({
-        title : 'Post Editado com sucesso!'
-      })
-      setPosts(updatedPosts);
-      setEditingPostId(null);
-      setEditedContent({title : "",description : "", imageUrl: ""});
+    SetLoading(true)
+    const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0] || null;
+
+    if (file) {
+      uploadImage(file, async (imgURL) => {
+        const res = await editpost(postId, editedContent?.title, editedContent?.description, imgURL);
+        SetLoading(false)
+        if (res.success) {
+          const updatedPosts = posts.map((post: any) =>
+            post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,imageUrl:imgURL  } : post
+          );
+          toast({
+            title : 'Post Editado com sucesso!'
+          })
+          setPosts(updatedPosts);
+          setEditingPostId(null);
+          setEditedContent({title : "",description : "", imageUrl: ""});
+        }
+      });
+    }else{
+        const res = await editpost(postId, editedContent?.title, editedContent?.description, '');
+        SetLoading(false)
+        if (res.success) {
+          const updatedPosts = posts.map((post: any) =>
+            post.id === postId ? { ...post, title:editedContent?.title ,description: editedContent?.description,imageUrl:''  } : post
+          );
+          toast({
+            title : 'Post Editado com sucesso!'
+          })
+          setPosts(updatedPosts);
+          setEditingPostId(null);
+          setEditedContent({title : "",description : "", imageUrl: ""});
+        }
     }
   };
 
@@ -244,6 +265,7 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
     }
   };
   const handleRemoveImage = () => {
+    setPhotoPreview(null)
     setEditedContent((prev) => ({
       ...prev,
       imageUrl: null,
@@ -254,15 +276,9 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
     const res = await updateSavedPosts(Number(post_id))
     const userSave = userLikes[Number(post_id)] || false;
     if(res.success){
-      // toast({
-      //   title : 'Post salvo com suceso!'
-      // })
-
-      // setSavedPost((prev) => ({
-      //   ...prev,
-      //   [post_id]: userSave ? (prev[Number(post_id)] || 0) - 1 : (prev[Number(post_id)] || 0) + 1,
-      // }));
-  
+      toast({
+        title : 'Post salvo com suceso!'
+      })
       setSavedPost((prev) => ({
         ...prev,
         [post_id]: !userSave, 
@@ -380,23 +396,50 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
                     rows={3}
                     className="w-full"
                   />
-                  
+                 {(!editedContent?.imageUrl && photoPreview) && (
+                   <>
+                    <div className="mb-4 relative">
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="relative top-[40px] right-0 bg-gray-800 bg-opacity-50 text-white rounded-full p-1 hover:bg-opacity-75 transition-opacity m-2"
+                      >
+                        <X size={16} />
+                      </button>
+                        <Image src={photoPreview} alt="" width={0} height={0} className="w-full"  unoptimized/>
+                    </div> 
+                   </>
+                 )}
                   {editedContent?.imageUrl ? (
                     <>
-                      <Image src={post?.imageUrl} alt="foto post" width={0} height={0} className="w-full"  unoptimized/>
-                      <Button onClick={handleRemoveImage}>Remover Imagem</Button>
+                      <div className="mb-4 relative">
+                        <button
+                          type="button"
+                          onClick={handleRemoveImage}
+                          className="relative top-[40px] right-0 bg-gray-800 bg-opacity-50 text-white rounded-full p-1 hover:bg-opacity-75 transition-opacity m-2"
+                        >
+                          <X size={16} />
+                        </button>
+                          <Image src={post?.imageUrl} alt="foto post" width={0} height={0} className="w-full"  unoptimized/>
+                      </div>  
                     </>
                   ) : (
-                    <Input
+                    <>
+                      <Input
                         type="file"
                         accept="image/*"
                         onChange={handlePhotoChange}
-                        // className="hidden"
+                        className="hidden"
                         id="photo-upload"
                       />
+                      <Label htmlFor="photo-upload" className="cursor-pointer px-4 py-2 rounded-md flex items-center border w-fit">
+                      <ImagePlus size={14} className="mr-2" />
+                      Upload Photo
+                      </Label>
+                    </>
                   )}
                   <Button onClick={() => handleSave(post.id)} className="mt-2 max-w-fit">
-                   Save Edit
+                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save Edit'}
                   </Button>
                 </div>
               </>
