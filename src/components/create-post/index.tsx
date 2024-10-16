@@ -12,7 +12,8 @@ import { Input } from "../ui/input";
 import { toast } from "@/hooks/use-toast";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import Image from "next/image";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, Loader2, X } from "lucide-react";
+import { Label } from "../ui/label";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -48,6 +49,7 @@ const formSchema = z.object({
 const CreatePost = ({ posts, setPosts }: any) => {
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>("");
+  const [loading,SetLoading] = useState(false)
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
 
   const handleRemoveImage = () => {
@@ -75,42 +77,34 @@ const CreatePost = ({ posts, setPosts }: any) => {
       reader.readAsDataURL(file);
     }
   };
-  const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
-    // SetLoading(true)
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    SetLoading(true)
     const fileInput = event.currentTarget.querySelector('input[type="file"]') as HTMLInputElement;
     const file = fileInput?.files?.[0] || null;
 
     if (file) {
         uploadImage(file, async (imgURL) => {
-          // console.log(imgURL);
-          
+          const createPostValues = {
+            title : values.title,
+            description : values.description,
+            imgURL,
+          }
+          const insertPost = await createpost(createPostValues);
+          SetLoading(false)
+          if (insertPost.success) {
+            toast({
+              title : "Post criado com sucesso!"
+            })
+            
+            setPosts(insertPost.updatedPosts);
+            setNewPost(""); 
+          }
         });
     }
-  }; 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    handlePhotoSubmit(event)
-    // console.log(values);
-    // console.log('imgURL ==>',imgURL);
-    const createPostValues = {
-      title : values.title,
-      description : values.description,
-      imgURL,
-    }
-    console.log(createPostValues);
+   
     
-    const insertPost = await createpost(createPostValues);
-      console.log(insertPost);
-      
-      if (insertPost.success) {
-        toast({
-          title : "Post criado com sucesso!"
-        })
-        
-        setPosts(insertPost.updatedPosts);
-        setNewPost(""); 
-      }
+     
   }
 
   // const submitNewPost = async () => {
@@ -196,15 +190,17 @@ const CreatePost = ({ posts, setPosts }: any) => {
                         className="hidden"
                         id="photo-upload"
                       />
-                      <label htmlFor="photo-upload" className="cursor-pointer px-4 py-2 rounded-md flex items-center">
+                      <Label htmlFor="photo-upload" className="cursor-pointer px-4 py-2 rounded-md flex items-center border w-fit">
                       <ImagePlus size={14} className="mr-2" />
                       Upload Photo
-                      </label>
+                      </Label>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit">Enviar</Button>
+              <Button type="submit">
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Enviar'}
+              </Button>
             </form>
           </Form>
         </CardContent>
