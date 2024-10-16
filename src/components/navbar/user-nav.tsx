@@ -20,6 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { SignOut } from "@/action/SignOut";
 
 type UserNavProps = {
     username: string,
@@ -27,6 +28,9 @@ type UserNavProps = {
     profileImageUrl: string
 }
 export function UserNav({ username, email, profileImageUrl }: UserNavProps) {
+    const handleLogoutClick = async () => {
+        await SignOut();
+    };
     return (
         <DropdownMenu>
             <TooltipProvider disableHoverableContent>
@@ -73,7 +77,7 @@ export function UserNav({ username, email, profileImageUrl }: UserNavProps) {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="hover:cursor-pointer" onClick={() => { }}>
+                <DropdownMenuItem className="hover:cursor-pointer" onClick={handleLogoutClick}>
                     <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
                     Sign out
                 </DropdownMenuItem>
