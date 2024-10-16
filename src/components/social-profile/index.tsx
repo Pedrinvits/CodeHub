@@ -67,15 +67,8 @@ const SocialProfile = () => {
                 </CardContent>
               </Card>
             </TabsContent> */}
-      <TabsContent value="likes">
-        <Card>
-          <CardHeader>
-            <h2 className="text-lg font-semibold">Likes</h2>
-          </CardHeader>
-          <CardContent>
-            <PostComponent prop={likedPosts} />
-          </CardContent>
-        </Card>
+      <TabsContent value="likes" className="w-full mx-0 space-y-4">
+        <PostComponent prop={likedPosts} />
       </TabsContent>
     </Tabs>
   );
