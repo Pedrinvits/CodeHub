@@ -101,32 +101,25 @@ const CreatePost = ({ posts, setPosts }: any) => {
             setNewPost(""); 
           }
         });
-    }
-   
-    
-     
+    }else{
+
+      const createPostValues = {
+        title : values.title,
+        description : values.description,
+        imgURL : '',
+      }
+      const insertPost = await createpost(createPostValues);
+      SetLoading(false)
+      if (insertPost.success) {
+        toast({
+          title : "Post criado com sucesso!"
+        })
+        
+        setPosts(insertPost.updatedPosts);
+        setNewPost(""); 
+      }
+    } 
   }
-
-  // const submitNewPost = async () => {
-  //   if (newPost.trim()) {
-  //     const newPostObject: Post = {
-  //       title: "", 
-  //       description: newPost.trim()
-  //     };
-
-  //     const insertPost = await createpost(newPostObject);
-
-  //     if (insertPost.success) {
-
-  //       setPosts(insertPost.updatedPosts);
-  //       setNewPost(""); 
-  //     }
-  //   }
-  // }
-
-  // const handleNewPost = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setNewPost(e.target.value);
-  // }
 
   return ( 
     <div className="flex flex-col">
