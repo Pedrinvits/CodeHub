@@ -27,11 +27,11 @@ type ProfileInfosProps = {
 const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
     return ( 
         <Card className="mb-8 shadow-lg">
-            <div className="relative h-48 bg-foreground">
+            <div className="relative h-48 bg-foreground rounded-t-lg">
               <Image
                 src={userProfile?.coverImageUrl ? userProfile?.coverImageUrl : ''}
                 alt=""
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-t-lg"
                 width={0}
                 height={0}
                 unoptimized
