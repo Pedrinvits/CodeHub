@@ -46,7 +46,7 @@ export default function AccountSettings({name,email,photo_user_profile} : Accoun
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
   const [loading,SetLoading] = useState(false)
   // console.log(props);
-  console.log(photoPreview);
+  // console.log(photoPreview);
   
   const handleProfileUpdate = async () => {
     SetLoading(true)
