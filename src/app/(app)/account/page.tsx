@@ -7,6 +7,7 @@ import { auth } from "../../../../auth";
 import { getUserById } from "../../../../data/user";
 import { ThemeSelect } from "@/components/mode-toggle/ThemeSelect";
 import DeleteAccount from "@/components/deleteAccount";
+import SideBarControl from "@/components/side-bar-control";
 
 
 const AccountPage = async () => {
@@ -17,10 +18,10 @@ const AccountPage = async () => {
         <div className="flex h-fit p-2 sm:w-3xl sm:mx-auto ">
             <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg shadow-lg mt-6">
                 <Tabs defaultValue="general" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="general">General</TabsTrigger>
                         <TabsTrigger value="appearance">Appearance</TabsTrigger>
-                        <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                        {/* <TabsTrigger value="notifications">Notifications</TabsTrigger> */}
                         <TabsTrigger value="danger">Danger Zone</TabsTrigger>
                     </TabsList>
                     <TabsContent value="general">
@@ -36,27 +37,28 @@ const AccountPage = async () => {
                                 <div className="space-y-2">
                                     <ThemeSelect />
                                 </div>
+                                <SideBarControl/>
                             </CardContent>
                         </Card>
                     </TabsContent>
-                    <TabsContent value="notifications">
+                    {/* <TabsContent value="notifications">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Notification Settings</CardTitle>
                                 <CardDescription>Manage your notification preferences.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {/* <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-2">
                                         <Switch id="email-notifications" />
                                         <Label htmlFor="email-notifications">Email Notifications</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Switch id="push-notifications" />
                                         <Label htmlFor="push-notifications">Push Notifications</Label>
-                                    </div> */}
+                                    </div>
                             </CardContent>
                         </Card>
-                    </TabsContent>
+                    </TabsContent> */}
                     <TabsContent value="danger">
                         <Card>
                             <CardHeader>
