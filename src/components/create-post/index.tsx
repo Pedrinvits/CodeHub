@@ -11,6 +11,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "../ui/input";
 import { toast } from "@/hooks/use-toast";
 import { useImageUpload } from "@/hooks/useImageUpload";
+import Image from "next/image";
+import { ImagePlus, X } from "lucide-react";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -48,6 +50,10 @@ const CreatePost = ({ posts, setPosts }: any) => {
   const [photoPreview, setPhotoPreview] = useState<string | null>("");
   const { imgURL, progressPorcent, uploadImage } = useImageUpload();
 
+  const handleRemoveImage = () => {
+    setNewPhoto(null)
+    setPhotoPreview(null)
+  }
   const [newPost, setNewPost] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -171,13 +177,29 @@ const CreatePost = ({ posts, setPosts }: any) => {
                 name="image"
                 render={({ field }) => (
                   <FormItem>
+                    {photoPreview && (
+                      <div className="mb-4 relative">
+                        <button
+                          type="button"
+                          onClick={handleRemoveImage}
+                          className="relative top-[40px] right-0 bg-gray-800 bg-opacity-50 text-white rounded-full p-1 hover:bg-opacity-75 transition-opacity m-2"
+                        >
+                          <X size={16} />
+                        </button>
+                        <Image src={photoPreview} alt="Preview" width={300} height={200} className="rounded-md"/>
+                      </div>                    
+                    )}
                     <Input
                         type="file"
                         accept="image/*"
                         onChange={handlePhotoChange}
-                        // className="hidden"
+                        className="hidden"
                         id="photo-upload"
                       />
+                      <label htmlFor="photo-upload" className="cursor-pointer px-4 py-2 rounded-md flex items-center">
+                      <ImagePlus size={14} className="mr-2" />
+                      Upload Photo
+                      </label>
                     <FormMessage />
                   </FormItem>
                 )}
