@@ -43,7 +43,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <Toaster />
-            <Navbar title={""} />
+            {/* <Navbar title={""} /> */}
             {children}
           </ThemeProvider>
         </body>

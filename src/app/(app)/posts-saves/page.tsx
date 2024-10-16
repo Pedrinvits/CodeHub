@@ -91,12 +91,18 @@ export default function SavedPosts() {
     )
   }
   return (
-    <div className="mx-auto w-3/4 flex flex-col gap-4">
-      <div className="mt-4">
+
+    <div className="flex min-h-fit w-full bg-card">
+      <main className="flex-1 p-4">
+        <div className="max-w-2xl mx-auto space-y-4">
+        {/* <div className="mt-4">
         <GoBackButton />
-      </div>
-      <h1 className="text-2xl font-bold my-2">Saved posts</h1>
-      <PostComponent prop={posts} />
+        </div> */}
+        <h1 className="text-2xl font-bold my-2">Saved posts</h1>
+        <PostComponent prop={posts} />
+        </div>
+      </main>
     </div>
+
   );
 }

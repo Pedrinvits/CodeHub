@@ -50,10 +50,10 @@ export default function TwitterDashboard() {
         to: addDays(new Date(2022, 0, 20), 20),
     })
     return (
-        <div className="flex min-h-fit w-full ">
-            <div className="w-full sm:mx-5 sm:mt-4 mx-2 my-4">
-                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg shadow-lg mt-6">
-                    <div className="sm:container sm:mx-auto sm:px-6 sm:py-8 px-1.5 py-4">
+        <main className="p-4 mx-auto">
+            {/* <div className="w-full sm:mx-5 sm:mt-4 mx-2 my-4"> */}
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg  mt-6 p-2">
+                    {/* <div className="sm:container sm:mx-auto sm:px-6 sm:py-8 px-1.5 py-4"> */}
                         <div className="flex sm:flex-row flex-col gap-4 justify-between mb-4">
                             <h1 className="mb-4 mx-3 text-2xl font-semibold">Dashboard</h1>
                             <Popover>
@@ -130,10 +130,10 @@ export default function TwitterDashboard() {
                                 </CardContent>
                             </Card>
                         </div>
-                    </div>
+                    {/* </div> */}
                 </main>
-            </div>
-        </div>
+            {/* </div> */}
+        </main>
     )
 }
 
