@@ -56,6 +56,9 @@ export const findposts = async () => {
           },
         },
       },
+      orderBy : {
+        updated_at : 'desc',
+      }
     });     
 
     return { posts, error: null };
@@ -85,6 +88,9 @@ export const findpost = async (
               },
             },
           },
+          orderBy : {
+            postId : 'desc',
+          }
         },
         author: { // Inclui o autor do post
           select: {
