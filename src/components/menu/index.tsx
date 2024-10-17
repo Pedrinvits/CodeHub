@@ -18,6 +18,7 @@ import {
 import { getMenuList } from "@/lib/menu-list";
 import { CollapseMenuButton } from "./collapse-menu";
 import { SignOut } from "@/action/SignOut";
+import { useSession } from "next-auth/react";
 
 interface MenuProps {
     isOpen: boolean | undefined;
@@ -25,7 +26,8 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
     const pathname = usePathname();
-    const menuList = getMenuList(pathname);
+    const {data} = useSession()
+    const menuList = getMenuList(pathname,data?.role);
 
     const handleLogoutClick = async () => {
         await SignOut();

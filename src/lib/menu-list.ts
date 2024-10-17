@@ -30,8 +30,8 @@ type Group = {
     menus: Menu[];
 };
 
-export function getMenuList(pathname: string): Group[] {
-    return [
+export function getMenuList(pathname: string, user_role: string): Group[] {
+    const menuList: Group[] = [
         {
             groupLabel: "",
             menus: [
@@ -46,21 +46,6 @@ export function getMenuList(pathname: string): Group[] {
         {
             groupLabel: "Contents",
             menus: [
-                // {
-                //     href: "",
-                //     label: "Posts",
-                //     icon: SquarePen,
-                //     submenus: [
-                //         {
-                //             href: "/posts",
-                //             label: "All Posts"
-                //         },
-                //         {
-                //             href: "/posts/new",
-                //             label: "New Post"
-                //         }
-                //     ]
-                // },
                 {
                     href: "/profile",
                     label: "Profile",
@@ -83,20 +68,59 @@ export function getMenuList(pathname: string): Group[] {
                 }
             ]
         },
-        // {
-        //     groupLabel: "Settings",
-        //     menus: [
-        //         {
-        //             href: "/users",
-        //             label: "Users",
-        //             icon: Users
-        //         },
-        //         {
-        //             href: "/account",
-        //             label: "Account",
-        //             icon: Settings
-        //         }
-        //     ]
-        // }
+        {
+            groupLabel: "Settings",
+            menus: [
+                {
+                    href: "/account",
+                    label: "Account",
+                    icon: Settings
+                }
+            ]
+        }
     ];
+    if (user_role === "SUPPORT") {
+        menuList.push({
+            groupLabel: "Suport",
+            menus: [
+               {
+                href : "",
+                label : "Suport",
+                icon : LayoutGrid,
+                submenus : [
+                    
+                    {
+                        href: "/admin/users",
+                        label: "Manage Users",
+                    },
+                ]
+               }
+            ]
+        });
+    }
+    if (user_role === "ADMIN") {
+        menuList.push({
+            groupLabel: "Admin",
+            menus: [
+               {
+                href : "",
+                label : "Admin",
+                icon : LayoutGrid,
+                submenus : [
+                    
+                    {
+                        href: "/admin/users",
+                        label: "Manage Users",
+                    },
+                    {
+                        href: "/dashboard",
+                        label: "Dashboard",
+                    }
+                ]
+               }
+            ]
+        });
+    }
+
+    return menuList;
 }
