@@ -7,7 +7,8 @@ import {
     LayoutGrid,
     LucideIcon,
     UserRound,
-    MessageSquare
+    MessageSquare,
+    UserRoundPlus
 } from "lucide-react";
 
 type Submenu = {
@@ -74,6 +75,11 @@ export function getMenuList(pathname: string): Group[] {
                     href: "/contact",
                     label: "Feedback",
                     icon: MessageSquare
+                },
+                {
+                    href: "/follow",
+                    label: "Follow",
+                    icon: UserRoundPlus
                 }
             ]
         },
