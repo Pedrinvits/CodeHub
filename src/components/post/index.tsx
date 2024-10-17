@@ -325,7 +325,12 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
                   <AvatarImage src={post.author?.profileImageUrl ? post.author?.profileImageUrl : ''} alt={`${post.user}'s avatar`} />
                   <AvatarFallback>{post.author?.username.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <Link href={`/profile/${post.author?.username}`} className="hover:underline"><p className="text-sm">{post.author?.username}</p></Link>
+                <Link href={`/profile/${post.author?.username}`}>
+                  <div>
+                      <p className="font-medium hover:underline">{post.author?.name}</p>
+                      <p className="text-sm text-muted-foreground hover:underline">@{post.author?.username}</p>
+                  </div>
+                </Link>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

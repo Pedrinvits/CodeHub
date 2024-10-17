@@ -29,6 +29,7 @@ export const findposts = async () => {
         },
         author: { // Inclui o autor do post
           select: {
+            name : true,
             username: true,
             profileImageUrl : true,
             id : true,
@@ -40,6 +41,7 @@ export const findposts = async () => {
             // Isso assume que você já adicionou a relação no modelo User, como discutido anteriormente.
             user: { 
               select: {
+                name : true,
                 username: true,
                 profileImageUrl : true,
                 savedPosts : true,
@@ -77,6 +79,7 @@ export const findpost = async (
           include: {
             user: { // Inclui o usuário que deu like
               select: {
+                name : true,
                 username: true,
                 profileImageUrl : true,
               },
@@ -85,6 +88,7 @@ export const findpost = async (
         },
         author: { // Inclui o autor do post
           select: {
+            name : true,
             username: true,
             profileImageUrl : true,
           },
@@ -95,6 +99,7 @@ export const findpost = async (
             // Isso assume que você já adicionou a relação no modelo User, como discutido anteriormente.
             user: { 
               select: {
+                name : true,
                 username: true,
                 profileImageUrl : true,
               },
