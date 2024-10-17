@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
   if (!token && pathname !== '/auth/login' && pathname !== '/auth/register') {
     return NextResponse.redirect(new URL('/auth/login', url));
   }
-  if (pathname == '/dashboard' && a.user.role !== 'ADMIN') {
+  if (pathname == '/admin/admin/dashboard' && a.user.role !== 'ADMIN') {
     return NextResponse.redirect(new URL('/auth/login', url));
   }
 }
