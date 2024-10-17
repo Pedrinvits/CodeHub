@@ -1,3 +1,4 @@
+"use server"
 import { db } from "@/lib/db";
 import { User, Post, Coment } from '@prisma/client';
 
