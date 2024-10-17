@@ -26,10 +26,10 @@ export const getUserFollowing = async (
 ) => {
     try {
         const session = await auth();
-        const authorId = session?.user?.id;
+        const authorId = session?.id;
 
          const following = await db.following.findMany({
-            where: { followerId: authorId }, // Aqui, você pode usar followerId se o `userId` for quem está seguindo.
+            where: { followerId: Number(authorId) }, // Aqui, você pode usar followerId se o `userId` for quem está seguindo.
             include: {
                 following: true, // Inclui informações dos usuários seguidos
             },
