@@ -23,8 +23,8 @@ const SuggestedUsers = ({ list, current_user_id }: SuggestedUsersProps) => {
                 {filteredList.length > 0 ? (
                     filteredList.map((listItem: any) => (
                         <li key={listItem.id} className="flex items-center gap-2 hover:bg-muted p-3 rounded-lg border shadow-lg">
-                            <Avatar className="rounded-full max-w-12">
-                                <AvatarImage src={listItem.profileImageUrl} alt={listItem.username} className="rounded-full" />
+                            <Avatar className="rounded-lg max-w-12">
+                                <AvatarImage src={listItem.profileImageUrl} alt={listItem.username} className="rounded-lg" />
                                 <AvatarFallback>{listItem.username?.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
