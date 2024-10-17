@@ -57,7 +57,7 @@ const RecentPosts = () => {
               </div> 
             )}
           </Button>
-          {showCreatePost && <CreatePost posts={posts} setPosts={setPosts} />}
+          {showCreatePost && <CreatePost posts={posts} setPosts={setPosts} onClose={() => setShowCreatePost(false)}/>}
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">

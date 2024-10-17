@@ -46,7 +46,7 @@ const formSchema = z.object({
 
 
 
-const CreatePost = ({ posts, setPosts }: any) => {
+const CreatePost = ({ posts, setPosts,onClose }: any) => {
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>("");
   const [loading,SetLoading] = useState(false)
@@ -99,6 +99,7 @@ const CreatePost = ({ posts, setPosts }: any) => {
             
             setPosts(insertPost.updatedPosts);
             setNewPost(""); 
+            onClose();
           }
         });
     }else{
@@ -117,6 +118,7 @@ const CreatePost = ({ posts, setPosts }: any) => {
         
         setPosts(insertPost.updatedPosts);
         setNewPost(""); 
+        onClose();
       }
     } 
   }
