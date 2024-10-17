@@ -15,6 +15,11 @@ export const deletepost = async (post_id: number) => {
           }
         }
       }),
+      db.coment.deleteMany({
+        where : {
+          post_id
+        },
+      }),
       db.postLike.deleteMany({
         where: {
           postId: post_id
