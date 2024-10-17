@@ -40,8 +40,8 @@ const ProfileInfos = ({userProfile} : ProfileInfosProps) => {
                 <ChangeCoverPhoto/>
               </div>
               <div className="absolute -bottom-16 left-4">
-                <Avatar className="rounded-full p-2">
-                  <AvatarImage src={userProfile?.profileImageUrl ? userProfile.profileImageUrl : ''} alt={ userProfile ? userProfile.name : ''} width={100} height={10} className="rounded-full" />
+                <Avatar className="rounded-lg p-2">
+                  <AvatarImage src={userProfile?.profileImageUrl ? userProfile.profileImageUrl : ''} alt={ userProfile ? userProfile.name : ''} width={100} height={10} className="rounded-lg" />
                   <AvatarFallback>{userProfile ? userProfile.name.charAt(0) : ''}</AvatarFallback>
                 </Avatar>
               </div>
