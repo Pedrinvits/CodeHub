@@ -70,6 +70,9 @@ const RecentPosts = () => {
               <PostComponent prop={posts.slice(0, visiblePosts)} />
               </TabsContent>
             <TabsContent value="following" className="w-full mx-0 space-y-4">
+              {Followingposts == '' &&(
+                <h1 className="text-center mt-4">You do not  have any following posts</h1>
+              )}
               <PostComponent prop={Followingposts.slice(0, visiblePosts)} />
             </TabsContent>
           </Tabs>
