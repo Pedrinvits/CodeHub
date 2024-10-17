@@ -1,6 +1,7 @@
 "use server"
 import { db } from "@/lib/db";
 import { User, Post, Coment } from '@prisma/client';
+import { auth } from "../auth";
 
 export type UserWithPostsAndComments = User & {
   posts: (Post & {
@@ -86,14 +87,30 @@ export const getUserByUsername = async (username : string) : Promise<UserWithPos
 }
 
 export const getUsers = async () => {
+
+  const session = await auth();
+  const authorId = session?.id;
+
+  const user = await getUserById(parseInt(authorId));
+
+  if (!user) {
+    throw new Error('Usuário não encontrado.');
+  }
+  const userId = user.id
+
   try {
       
       const recentsUsers = await db.user.findMany({
-        take : 3,
+        where: {
+          id: {
+            not: userId,
+          },
+        },
+        take: 4,
         orderBy: {
           id: 'asc',
-        }
-      })
+        },
+      });
 
       return recentsUsers;
 

@@ -32,6 +32,13 @@ export default function Component() {
                 })
                 return 
             }
+            if(results.id == current_user_id) {
+                toast({
+                    title: 'The user you are search cannot be you',
+                    description : 'Please try another user that is not you'
+                })
+                return 
+            }
             
             setSearchResults(results)
 
