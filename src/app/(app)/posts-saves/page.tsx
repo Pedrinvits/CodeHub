@@ -83,10 +83,14 @@ export default function SavedPosts() {
   if (posts?.length == 0) {
     return (
       <div className="min-h-fit mx-auto w-3/4 flex flex-col gap-4bg-card">
-        <div className="mt-4">
-          <GoBackButton />
-        </div>
-        <h1 className="text-2xl font-bold my-10">You do not have saved posts!</h1>
+        <main className="flex-1 p-4">
+        <div className="max-w-2xl mx-auto space-y-4">
+          <div className="mt-4">
+            <GoBackButton />
+          </div>
+          <h1 className="text-2xl font-bold my-10">You do not have saved posts!</h1>
+          </div>
+        </main>
       </div>
     )
   }
