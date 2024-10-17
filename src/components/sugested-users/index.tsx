@@ -5,47 +5,49 @@ import UnfollowButton from "../unfollow-button";
 import Link from "next/link";
 
 type SuggestedUsersProps = {
-    list : [
+    list: [
         isFollowed: string,
         id: string,
         name: string,
         username: string,
-        profileImageUrl : string
+        profileImageUrl: string
     ],
-    current_user_id : string
+    current_user_id: string
 }
-const SuggestedUsers = async ({ list, current_user_id }: SuggestedUsersProps) => {
+const SuggestedUsers = ({ list, current_user_id }: SuggestedUsersProps) => {
 
     return (
         <>
-            <h2 className="text-xl font-semibold mt-6 mb-4">Suggested Users</h2>
             <ul className="space-y-4 flex flex-col gap-4">
-            {list?.filter((listItem: any) => listItem.id !== current_user_id).length > 0 ? (
-                list
-                    ?.filter((listItem: any) => listItem.id !== current_user_id)
-                    .map((listItem: any) => (
-                        <Link href={`/profile/${listItem.username}`} className="p-2 shadow-lg rounded-md">
-                                <li key={listItem.id} className="flex items-center gap-2">
+                {list?.filter((listItem: any) => listItem.id !== current_user_id).length > 0 ? (
+                    list
+                        ?.filter((listItem: any) => listItem.id !== current_user_id)
+                        .map((listItem: any) => (
+                            
+                            <li key={listItem.id} className="flex items-center gap-2 hover:bg-muted p-3 rounded-lg border shadow-lg">
                                 <Avatar className="rounded-full max-w-12">
-                                    <AvatarImage 
-                                        src={listItem.profileImageUrl ? listItem.profileImageUrl : ''} 
-                                        alt={`${listItem.name}'s avatar`} 
-                                        className="rounded-full"
-                                    />
-                                    <AvatarFallback>{listItem.name.charAt(0)}</AvatarFallback>
+                                    <AvatarImage src={listItem.profileImageUrl} alt={listItem.username} className="rounded-full" />
+                                    <AvatarFallback>{listItem.username?.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <span className="text-sm">{listItem.username}</span>
+                                <div>
+
+                                    <Link href={`/profile/${listItem.username}`} className="shadow-lg rounded-md">
+                                        <p className="font-medium">{listItem.name}</p>
+                                        <p className="text-sm text-muted-foreground">@{listItem.username}</p>
+                                    </Link>
+
+                                </div>
                                 {listItem.isFollowed ? (
                                     <UnfollowButton followerId={current_user_id} followingId={listItem.id} />
                                 ) : (
                                     <FollowButton followerId={current_user_id} followingId={listItem.id} />
                                 )}
                             </li>
-                        </Link>
-                    ))
-            ) : (
-                <p className="text-sm text-gray-400">No users found</p>
-            )}
+
+                        ))
+                ) : (
+                    <p className="text-sm text-gray-400">No users found</p>
+                )}
             </ul>
         </>
     );
