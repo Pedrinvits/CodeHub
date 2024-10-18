@@ -109,7 +109,7 @@ export function getMenuList(pathname: string, user_role: string): Group[] {
                 submenus : [
                     
                     {
-                        href: "/admin/users",
+                        href: "/admin/manage-users",
                         label: "Manage Users",
                     },
                     {
