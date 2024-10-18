@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,10 +8,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
-import { Pencil, Trash2, Search, UserPlus } from "lucide-react"
+import { Pencil, Trash2, Search, UserPlus, Loader2, Eye, EyeOff } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { getUsers } from "../../../../data/user"
 import { updateUserInformations } from "../../../../data/updateUser"
+import { deleteUser } from "../../../../data/deleteUser"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { RegisterSchema } from "../../../../schemas"
+import { infer, z } from "zod"
+import { Register } from "@/action/register"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 type User = {
   id: number
@@ -35,7 +42,7 @@ export default function ManageExistingUsers() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [newUser, setNewUser] = useState<Omit<User, "id">>({ name: "", email: "", role: "User" })
+  const [newUser, setNewUser] = useState<Omit<User, "id">>({ name: "", email: "", role: "USER" })
 
   useEffect(()=>{
     const fetch = async () => {
@@ -64,28 +71,70 @@ export default function ManageExistingUsers() {
     })
   }
 
-  const handleDeleteUser = (userId: number) => {
+  const handleDeleteUser = async (userId: number) => {
     setUsers(users.filter((user) => user.id !== userId))
+    const res = await deleteUser(userId)
+   if(res.success){
     toast({
       title: "User deleted",
       description: "The user has been removed from the system.",
       variant: "destructive",
     })
+   }
+    
   }
+  const [isPending,startTransition] = useTransition()
+  const [error,SetError] = useState<string | undefined>("")
+  const [sucess,SetSucess] = useState<string | undefined>("")
+  const [seePassword,SetseePassword] = useState<boolean>(false)
 
-  const handleCreateUser = (e: React.FormEvent) => {
-    e.preventDefault()
-    const newUserId = Math.max(...users.map((user) => user.id)) + 1
-    const createdUser = { ...newUser, id: newUserId }
-    setUsers([...users, createdUser])
-    setIsCreateDialogOpen(false)
-    setNewUser({ name: "", email: "", role: "User"})
-    toast({
-      title: "User created",
-      description: `${createdUser.name} has been added to the system.`,
-    })
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+      resolver : zodResolver(RegisterSchema),
+      defaultValues : {
+          email : "",
+          password : "",
+          username : "",
+          name : "",
+      }
+  })
+
+  const OnSubmit = (values : z.infer<typeof RegisterSchema>) => {
+
+      SetError("")
+      SetSucess("")
+
+     startTransition(()=>{
+          Register(values)
+          .then((data) => {
+              SetError(data.error);
+              SetSucess(data.sucess)
+              const name = data?.user?.name ? data.user.name.toString() : "";
+              const email = data?.user?.email ? data.user.email.toString() : "";
+
+              if(data.sucess){
+                setNewUser({ 
+                  ...newUser,
+                  name,
+                  email, 
+                  role: "USER" 
+                });
+                const newUserId = Math.max(...users.map((user) => user.id)) + 1;
+                const createdUser = { name, email, role: "USER", id: newUserId };
+                
+                setUsers([...users, createdUser]);
+                setIsCreateDialogOpen(false);
+                
+                toast({
+                  title: "User created",
+                  description: `${createdUser.name} has been added to the system.`,
+                });
+               
+              }
+          })
+     })
+
   }
-
+ 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -204,46 +253,82 @@ export default function ManageExistingUsers() {
           <DialogHeader>
             <DialogTitle>Create New User</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleCreateUser} className="space-y-4">
-            <div>
-              <Label htmlFor="create-name">Name</Label>
-              <Input
-                id="create-name"
-                value={newUser.name}
-                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="create-email">Email</Label>
-              <Input
-                id="create-email"
-                type="email"
-                value={newUser.email}
-                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="create-role">Role</Label>
-              <Select
-                value={newUser.role}
-                onValueChange={(value) => setNewUser({ ...newUser, role: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((role) => (
-                    <SelectItem key={role} value={role}>
-                      {role}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Button type="submit">Create User</Button>
-          </form>
+          <Form {...form}>
+                <form 
+                 onSubmit={form.handleSubmit(OnSubmit)}
+                 className='space-y-6'
+                 >
+                    <div className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name='name'
+                            render={({field}) => (
+                                <FormItem>
+                                      <FormLabel>Nome</FormLabel>
+                                      <FormControl>
+                                        <Input {...field} 
+                                        placeholder='Seu nome' 
+                                        type='name'
+                                        />
+                                      </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name='email'
+                            render={({field}) => (
+                                <FormItem>
+                                      <FormLabel>Email</FormLabel>
+                                      <FormControl>
+                                        <Input {...field} 
+                                          placeholder='exemplo@exemplo.com' 
+                                          type='email'
+                                        />
+                                      </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='username'
+                            render={({field}) => (
+                                <FormItem>
+                                      <FormLabel>Username</FormLabel>
+                                      <FormControl>
+                                        <Input {...field} placeholder='username' type='text'/>
+                                      </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                        control={form.control}
+                        name='password'
+                        render={({field}) => (
+                            <FormItem>
+                              <FormLabel>Senha</FormLabel>
+                              <div className='flex relative'>
+                                <FormControl>
+                                  <Input {...field} placeholder='********' type={seePassword ? 'text' : 'password'}/>
+                                </FormControl>
+                                <FormControl>
+                                  <Button className="absolute bottom-1 right-1 h-7 w-7" size="icon" variant="ghost" type="button" onClick={()=>SetseePassword(!seePassword)}>
+                                      {seePassword ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                  </Button>
+                                </FormControl>
+                              </div>
+                            </FormItem>
+                        )}
+                        />
+                    </div>   
+                    <Button 
+                    type='submit'
+                    className='w-full'
+                    disabled={isPending}
+                    >{isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Registrar'}</Button>
+                </form>
+           </Form>
         </DialogContent>
       </Dialog>
     </main>
