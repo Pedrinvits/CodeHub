@@ -86,7 +86,7 @@ export const getUserByUsername = async (username : string) : Promise<UserWithPos
   }
 }
 
-export const getUsers = async () => {
+export const getUsers = async (limit ?: number) => {
 
   const session = await auth();
   const authorId = session?.id;
@@ -106,7 +106,7 @@ export const getUsers = async () => {
             not: userId,
           },
         },
-        take: 4,
+        take: limit ? limit : undefined,
         orderBy: {
           id: 'asc',
         },
