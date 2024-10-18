@@ -37,6 +37,7 @@ export const createpost = async (
       include : {
         author : {
           select : {
+            name: true,
             username : true,
             profileImageUrl : true,
           }
