@@ -4,6 +4,7 @@ import { auth } from "../auth";
 import { getUserByEmail,getUserById } from "./user";
 
 export const deleteUser = async (
+  userId : number
 ) => {
   try {
     const session = await auth();
@@ -18,7 +19,7 @@ export const deleteUser = async (
 
     // Atualizando as informações do usuário no banco de dados
     const updatedUser = await db.user.delete({
-      where: { id: user.id } // Atualiza o usuário baseado no ID
+      where: { id: userId } // Atualiza o usuário baseado no ID
     });
 
     // console.log('Informações atualizadas:', updatedUser);
