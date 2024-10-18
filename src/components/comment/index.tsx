@@ -8,6 +8,7 @@ import { deleteComment } from "../../../data/comments/delete-comment";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { editComments } from "../../../data/comments/edit-comment";
 import { toast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 type commentProps = {
   postId: string;
@@ -15,11 +16,12 @@ type commentProps = {
   coment_username: string;
   coment_profileImageUrl: string;
   comment_id: string;
+  coment_name: string;
   onRemoveComment: (postId: number, commentId: string) => void;
   onEditComment?: (commentId: string, newContent: string) => Promise<void>;
 };
 
-const Comment = ({ postId, content, comment_id, coment_username, coment_profileImageUrl, onRemoveComment, onEditComment }: commentProps) => {
+const Comment = ({ postId, content, comment_id, coment_username, coment_profileImageUrl, onRemoveComment, onEditComment,coment_name}: commentProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editedContent, setEditedContent] = useState(content);
 
@@ -60,7 +62,10 @@ const Comment = ({ postId, content, comment_id, coment_username, coment_profileI
             <AvatarImage src={coment_profileImageUrl || ""} alt={`${coment_username}'s avatar`} />
             <AvatarFallback>{coment_username.charAt(0)}</AvatarFallback>
           </Avatar>
-          <p className="text-sm text-slate-200">{coment_username}</p>
+          <Link href={`/profile/${coment_username}`} className="shadow-lg rounded-md">
+              <p className="font-medium">{coment_name}</p>
+              <p className="text-sm text-muted-foreground">@{coment_username}</p>
+          </Link>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
