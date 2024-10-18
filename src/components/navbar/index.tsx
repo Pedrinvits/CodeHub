@@ -3,6 +3,7 @@ import { SheetMenu } from "./sheet-menu";
 import { UserNav } from "./user-nav";
 import { auth } from "../../../auth";
 import { getUserById } from "../../../data/user";
+import GitHubStarButton from "../github-start-button";
 
 
 interface NavbarProps {
@@ -22,6 +23,7 @@ export async function Navbar({ title }: NavbarProps) {
                     <h1 className="font-bold">{title}</h1>
                 </div>
                 <div className="flex flex-1 items-center justify-end gap-4">
+                    <GitHubStarButton/>
                     <ModeToggle />
                     <UserNav username={user?.username} email={user?.email} profileImageUrl={user?.profileImageUrl} />
                 </div>

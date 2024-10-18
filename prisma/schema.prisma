@@ -25,7 +25,8 @@ model User {
   commentLikes    CommentLike[] 
   comments        Coment[]      
   savedPosts      SavedPost[]   
-  PostLike        PostLike[]   
+  PostLike        PostLike[]
+  star            GitHubStar[]   
   role            Role          @default(USER) 
 
   @@map("users")
@@ -116,4 +117,12 @@ model SavedPost {
 
   @@unique([userId, postId]) // Um usuário pode salvar um post apenas uma vez
   @@map("saved_posts")
+}
+
+model GitHubStar {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  @@map("github_stars")
 }
