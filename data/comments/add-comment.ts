@@ -18,6 +18,8 @@ export const createComments = async (
         user : {
           select : {
             username : true,
+            name : true,
+            profileImageUrl : true,
           }
         }
       }
