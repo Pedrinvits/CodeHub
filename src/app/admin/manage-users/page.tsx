@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 
 import { Pencil, Trash2, Search, UserPlus } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
+import { getUsers } from "../../../../data/user"
+import { updateUserInformations } from "../../../../data/updateUser"
 
 type User = {
   id: number
@@ -25,25 +27,37 @@ const initialUsers: User[] = [
   { id: 3, name: "Alice Johnson", email: "alice@example.com", role: "USER" },
 ]
 
-const roles = ["User", "Admin", "Manager"]
+const roles = ["USER", "ADMIN","SUPPORT" ,"MODERATOR"]
 
 export default function ManageExistingUsers() {
-  const [users, setUsers] = useState<User[]>(initialUsers)
+  const [users, setUsers] = useState<User[]>([])
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [newUser, setNewUser] = useState<Omit<User, "id">>({ name: "", email: "", role: "User" })
 
+  useEffect(()=>{
+    const fetch = async () => {
+      const res = await getUsers()
+      setUsers(res)
+    }
+    fetch()
+  },[])
+
   const handleEditUser = (user: User) => {
     setEditingUser(user)
     setIsEditDialogOpen(true)
   }
 
-  const handleUpdateUser = (updatedUser: User) => {
+  const handleUpdateUser = async (updatedUser: User) => {
     setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)))
     setIsEditDialogOpen(false)
     setEditingUser(null)
+    const res = await updateUserInformations(updatedUser)
+    console.log(res);
+    // console.log(res);
+    
     toast({
       title: "User updated",
       description: `${updatedUser.name}'s information has been updated.`,
