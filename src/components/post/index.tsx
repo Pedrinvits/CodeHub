@@ -319,7 +319,8 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
   return (
     <>
       {posts.map((post: any) => (
-        <Card key={post.id} className="w-full mx-auto shadow-lg">
+        <div key={post.id}>
+        <Card className="w-full mx-auto shadow-lg">
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex w-full justify-between">
               <div className="flex gap-4 items-center justify-center">
@@ -501,26 +502,25 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
             {activeCommentSection === post.id && (
               <div id={`comments-${post.id}`} className="w-full mt-4 space-y-2 ">
                   <div className="w-full mt-4 space-y-2">
-                   {
-                    Object.entries(comments).map(([postId, comments]) => {
-                      return (
-                        <div key={postId} className="flex flex-col gap-4">
-                          {comments?.map((comment : any) => (
+                  {
+                      Object.entries(comments).map(([postId, comments]) => (
+                        <div key={postId} className="flex flex-col gap-4 w-full">
+                          {comments?.map((comment: any) => (
                             <Comment 
+                              key={comment.id} // Adiciona a key para o comentário
                               postId={postId} 
                               content={comment.coment} 
                               comment_id={comment.id} 
                               coment_username={comment.user?.username} 
                               coment_name={comment.user?.name} 
                               coment_avatar_url={comment.user?.profileImageUrl} 
-                              coment_profileImageUrl={comment.user?.profileImageUrl} 
                               onRemoveComment={handleRemoveComment}
                             />
                           ))}
                         </div>
-                      );
-                    })
-                   }
+                      ))
+                    }
+
                   </div>
                   <div className="flex gap-2 mt-2">
                   <Input
@@ -538,6 +538,7 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
               )}
           </CardFooter>
         </Card>
+        </div>
       ))}
     </>
   );
