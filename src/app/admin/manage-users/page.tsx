@@ -142,7 +142,7 @@ export default function ManageExistingUsers() {
   )
 
   return (
-    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg mt-6 p-4 max-w-4xl mx-auto">
+    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-card rounded-lg mt-6 p-4 max-w-4xl mx-auto h-fit shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Manage Existing Users</h1>
 
       <div className="flex justify-between items-center mb-4">

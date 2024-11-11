@@ -53,7 +53,7 @@ const RecentPosts = () => {
             ( 
               <div className="flex items-center justify-between">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                <p>Criar post</p>
+                <p>Create post</p>
               </div> 
             )}
           </Button>
@@ -64,7 +64,7 @@ const RecentPosts = () => {
         <Tabs defaultValue="feed" className="mb-8">
         <TabsList className="w-full">
               <TabsTrigger value="feed" className="flex-1">Feed</TabsTrigger>
-              <TabsTrigger value="following" className="flex-1">Seguindo</TabsTrigger>
+              <TabsTrigger value="following" className="flex-1">Following</TabsTrigger>
             </TabsList>
             <TabsContent value="feed" className="w-full mx-0 space-y-4">
               <PostComponent prop={posts.slice(0, visiblePosts)} />
@@ -79,7 +79,7 @@ const RecentPosts = () => {
           <div className="flex justify-center">
             {visiblePosts < posts.length && (
               <Button onClick={loadMorePosts} className="mt-4">
-                Carregar mais
+                More
               </Button>
             )}
           </div>

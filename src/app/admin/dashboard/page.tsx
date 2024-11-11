@@ -52,9 +52,9 @@ export default function TwitterDashboard() {
     return (
         <main className="p-4 mx-auto">
             {/* <div className="w-full sm:mx-5 sm:mt-4 mx-2 my-4"> */}
-                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg  mt-6 p-2">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-card rounded-lg mt-6 p-2">
                     {/* <div className="sm:container sm:mx-auto sm:px-6 sm:py-8 px-1.5 py-4"> */}
-                        <div className="flex sm:flex-row flex-col gap-4 justify-between mb-4">
+                        <div className="flex sm:flex-row flex-col gap-4 justify-between mb-4 p-2">
                             <h1 className="mb-4 mx-3 text-2xl font-semibold">Dashboard</h1>
                             <Popover>
                                 <PopoverTrigger asChild>
@@ -103,8 +103,8 @@ export default function TwitterDashboard() {
                         <div className="flex sm:flex-row flex-col gap-4 justify-around">
                             <Card className="sm:w-fit w-full shadow-lg">
                                 <CardHeader>
-                                    <CardTitle>Tweet Activity</CardTitle>
-                                    <CardDescription>Tweet engagement over the last 6 months</CardDescription>
+                                    <CardTitle>Posts Activity</CardTitle>
+                                    <CardDescription>Posts engagement over the last 6 months</CardDescription>
                                 </CardHeader>
                                 <CardContent className="pl-2">
                                     <ChartContainer config={chartConfig} className="min-h-[200px] sm:w-fit w-full">
@@ -117,8 +117,8 @@ export default function TwitterDashboard() {
                             </Card>
                             <Card className="sm:w-fit w-full shadow-lg">
                                 <CardHeader>
-                                    <CardTitle>Tweet Categories</CardTitle>
-                                    <CardDescription>Tweet engagement over the last 6 months</CardDescription>
+                                    <CardTitle>Posts Categories</CardTitle>
+                                    <CardDescription>Posts engagement over the last 6 months</CardDescription>
                                 </CardHeader>
                                 <CardContent className="pl-2">
                                     <ChartContainer config={chartConfig} className="min-h-[200px] sm:w-fit w-full">
