@@ -1,19 +1,22 @@
 "use server"
 import { db } from "@/lib/db";
+import { auth } from "../../auth";
 
 
 export const followUser = async (
-  followerId: number, 
   followingId: number
 ) => {
   try {
+    const session = await auth()
+    const userId = session?.id
+
     const existingFollowing = await db.following.findFirst({
       where: {
-        followerId,
+        followerId: Number(userId),
         followingId
       }
     });
-    
+
     if (existingFollowing) {
       throw new Error("Você já está seguindo esse usuário.");
     }
@@ -21,8 +24,8 @@ export const followUser = async (
     // Cria a relação de "seguir"
     await db.following.create({
       data: {
-        followerId,  // ID do usuário que está seguindo
-        followingId   // ID do usuário que está sendo seguido
+        followerId: Number(userId),
+        followingId
       }
     });
 
@@ -34,25 +37,27 @@ export const followUser = async (
 };
 
 
-export const unfollowUser  = async (
+export const unfollowUser = async (
 
-    followerId: number, followingId: number
+  followingId: number
 
 ) => {
   try {
 
+    const session = await auth()
+    const userId = session?.id
+
     const existingFollowing = await db.following.findFirst({
-        where: {
-          followerId,
-          followingId
-        }
-      });
+      where: {
+        followerId: Number(userId),
+        followingId
+      }
+    });
 
     if (!existingFollowing) {
-        throw new Error("Você não está seguindo esse usuário.");
+      throw new Error("Você não está seguindo esse usuário.");
     }
 
-    // Remove a relação de "seguir"
     await db.following.delete({
         where: { id: existingFollowing.id }
     });

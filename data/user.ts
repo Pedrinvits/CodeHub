@@ -69,6 +69,8 @@ export const getUserByUsername = async (username : string) : Promise<UserWithPos
                 coments: true, 
               },
             },
+            followers : true,
+            following : true,
             _count : {
               select : {
                 following : true,
@@ -105,6 +107,10 @@ export const getUsers = async (limit ?: number) => {
           id: {
             not: userId,
           },
+        },
+        include : {
+          followers : true,
+          following : true,
         },
         take: limit ? limit : undefined,
         orderBy: {
