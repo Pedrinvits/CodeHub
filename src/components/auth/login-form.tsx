@@ -55,8 +55,8 @@ export const LoginForm = () => {
     }
     return (
         <CardWrapper
-            headerLabel="Bem vindo de volta!"
-            backButtonLabel="Não possui conta? Registre-se"
+            headerLabel="Welcome back!"
+            backButtonLabel="Don't have an account? Sign up"
             backButtonHref="/auth/register"
             showSocial
         >
@@ -73,7 +73,7 @@ export const LoginForm = () => {
                                 <FormItem>
                                       <FormLabel>Email</FormLabel>
                                       <FormControl>
-                                        <Input {...field} placeholder='exemplo@exemplo.com' type='email'/>
+                                        <Input {...field} placeholder='example@example.com' type='email'/>
                                       </FormControl>
                                       <FormMessage/>
                                 </FormItem>
@@ -85,7 +85,7 @@ export const LoginForm = () => {
                         name='password'
                         render={({field}) => (
                             <FormItem>
-                                    <FormLabel>Senha</FormLabel>
+                                    <FormLabel>Password</FormLabel>
                                         <div className='flex relative'>
                                             <FormControl>
                                             <Input {...field} placeholder='********' type={seePassword ? 'text' : 'password'}/>

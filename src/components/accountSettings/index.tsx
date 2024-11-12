@@ -91,12 +91,12 @@ export default function AccountSettings({name,email,photo_user_profile} : Accoun
     SetLoading(true)
     try {
           if(passwordData.newpassword !== passwordData.confirmpassword){
-            console.log('Senhas digitadas sao incorretas');
+            console.log('Passwords entered are incorrect');
           }
           const result = await updateUserPassword(passwordData.currentpassword, passwordData?.newpassword)
          if(result.success){
           toast({
-            title: "Senha alterada com sucesso!",
+            title: "Password changed successfully!",
           })
          }
     }
@@ -140,7 +140,7 @@ export default function AccountSettings({name,email,photo_user_profile} : Accoun
          if(res.success){
             SetLoading(false)
             toast({
-              title: "Foto de perfil alterada com sucesso!",
+              title: "Foto de Profile alterada com sucesso!",
             })
          }
          
@@ -177,14 +177,14 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
               onClick={() => setSelectedOption("profile")}
               className="w-full justify-start"
             >
-              Perfil
+              Profile
             </Button>
             <Button
               variant={selectedOption === "password" ? "secondary" : "ghost"}
               onClick={() => setSelectedOption("password")}
               className="w-full justify-start"
             >
-              Senha
+              Password
             </Button>
             <Button
               variant={selectedOption === "photo" ? "secondary" : "ghost"}
@@ -205,12 +205,12 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
             {selectedOption === "profile" && (
                   <div id="profile" className="space-y-6">
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">Perfil</h3>
-                    <p className="text-muted-foreground">Troque seu nome ou outra informação da conta</p>
+                    <h3 className="text-lg font-semibold">Profile</h3>
+                    <p className="text-muted-foreground">Change your name or other account information</p>
                   </div>
                   <div className="grid gap-4">
                     <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                      <Label htmlFor="name">Nome</Label>
+                      <Label htmlFor="name">Name</Label>
                       <Input 
                         id="name" 
                         defaultValue={name} 
@@ -226,7 +226,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                       />
                     </div>
                       <Button className="w-full" onClick={handleProfileUpdate}>
-                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar'}
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save'}
                       </Button>
                     </div>
                   </div>
@@ -234,16 +234,16 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                 {selectedOption === "password" && (
                   <div id="password" className="space-y-6">
                     <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">Senha</h3>
-                      <p className="text-muted-foreground">Troque a senha da sua conta</p>
+                      <h3 className="text-lg font-semibold">Password</h3>
+                      <p className="text-muted-foreground">Change your account password</p>
                     </div>
                     <div className="grid gap-4">
                       <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                        <Label htmlFor="current-password">Senha Atual</Label>
+                        <Label htmlFor="current-password">Current Password</Label>
                         <Input 
                           id="currentpassword" 
                           type={seePassword ? 'text' : 'password'} 
-                          placeholder="Coloque sua senha atual" 
+                          placeholder="Enter your current password" 
                           onChange={(e) => setpasswordData({...passwordData, currentpassword:e.target.value})}
                           />
                         <Button className="absolute bottom-1 right-1 h-7 w-7" size="icon" variant="ghost" type="button" onClick={()=>SetseePassword(!seePassword)}>
@@ -251,25 +251,25 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                         </Button>
                       </div>
                       <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                        <Label htmlFor="new-password">Nova Senha</Label>
+                        <Label htmlFor="new-password">New Password</Label>
                         <Input 
                           id="newpassword" 
                           type={seePassword ? 'text' : 'password'} 
-                          placeholder="Coloque sua nova senha" 
+                          placeholder="Confirm new password" 
                           onChange={(e) => setpasswordData({...passwordData, newpassword:e.target.value})}
                           />
                       </div>
                       <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                        <Label htmlFor="confirm-password">Confirme a nova senha</Label>
+                        <Label htmlFor="confirm-password">Confirm new password</Label>
                         <Input 
                           id="confirmpassword" 
                           type={seePassword ? 'text' : 'password'} 
-                          placeholder="Confirme sua nova senha" 
+                          placeholder="Confirm new password" 
                           onChange={(e) => setpasswordData({...passwordData, confirmpassword:e.target.value})}
                           />
                       </div>
                       <Button className="w-full" onClick={handlePasswordUpdate}>
-                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Trocar Senha'}
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Change Password'}
                       </Button>
                     </div>
                   </div>
@@ -277,8 +277,8 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                 {selectedOption === "photo" && (
                 <div id="photo" className="space-y-6">
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">Foto do Perfil</h3>
-                    <p className="text-muted-foreground">Atualize sua foto de perfil</p>
+                    <h3 className="text-lg font-semibold">Profile Photo</h3>
+                    <p className="text-muted-foreground">Update your profile photo</p>
                   </div>
                   <div className="flex flex-col items-center gap-4">
                     <Avatar className="w-32 h-32">
@@ -301,7 +301,7 @@ const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
                             </Button>
                           </Label> */}
                           <Button type="submit" disabled={!newPhoto}>
-                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Salvar foto'}
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save photo'}
                           </Button>
                           </div>
                     </form>

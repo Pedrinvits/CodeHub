@@ -193,7 +193,7 @@ const CreatePost = ({ posts, setPosts,onClose }: any) => {
                 )}
               />
               <Button type="submit">
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Enviar'}
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Send'}
               </Button>
             </form>
           </Form>

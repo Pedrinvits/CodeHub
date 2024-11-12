@@ -73,9 +73,9 @@ export const RegisterForm = () => {
                             name='name'
                             render={({field}) => (
                                 <FormItem>
-                                      <FormLabel>Nome</FormLabel>
+                                      <FormLabel>Name</FormLabel>
                                       <FormControl>
-                                        <Input {...field} placeholder='Seu nome' type='name'/>
+                                        <Input {...field} placeholder='Your name' type='name'/>
                                       </FormControl>
                                       <FormMessage/>
                                 </FormItem>
@@ -89,7 +89,7 @@ export const RegisterForm = () => {
                                 <FormItem>
                                       <FormLabel>Email</FormLabel>
                                       <FormControl>
-                                        <Input {...field} placeholder='exemplo@exemplo.com' type='email'/>
+                                        <Input {...field} placeholder='example@example.com' type='email'/>
                                       </FormControl>
                                       <FormMessage/>
                                 </FormItem>
@@ -113,7 +113,7 @@ export const RegisterForm = () => {
                         name='password'
                         render={({field}) => (
                             <FormItem>
-                                    <FormLabel>Senha</FormLabel>
+                                    <FormLabel>Password</FormLabel>
                                         <div className='flex relative'>
                                             <FormControl>
                                             <Input {...field} placeholder='********' type={seePassword ? 'text' : 'password'}/>

@@ -46,7 +46,8 @@ export default function SavedPosts() {
     const fetchSavedPosts = async () => {
       try {
         const res = await GetsavedPosts();
-        if(res.success){
+        console.log(res);
+        if(res){
           setPosts(res.savedPosts);
         }
       } catch (error) {
@@ -56,7 +57,7 @@ export default function SavedPosts() {
 
     fetchSavedPosts();
   }, []);
-  // console.log(posts);
+  
 
   if (posts?.length == 0) {
     return (

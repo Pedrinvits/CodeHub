@@ -283,7 +283,7 @@ export default function ManageExistingUsers() {
                                       <FormLabel>Email</FormLabel>
                                       <FormControl>
                                         <Input {...field} 
-                                          placeholder='exemplo@exemplo.com' 
+                                          placeholder='example@example.com' 
                                           type='email'
                                         />
                                       </FormControl>
