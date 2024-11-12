@@ -124,3 +124,41 @@ export const getUsers = async (limit ?: number) => {
       return null
   }
 }
+
+export const getUsersNotFollowing = async (userId: number) => {
+
+  try {
+    // Busca todos os usuários que o usuário atual está seguindo
+    const followedUsers = await db.following.findMany({
+        where: {
+            followerId: Number(userId)
+        },
+        select: {
+            followingId: true // Pegamos o ID dos usuários seguidos
+        }
+    })
+
+    // Coletando os IDs dos usuários seguidos
+    const followedUserIds = followedUsers.map(follow => follow.followingId)
+
+    // Busca todos os usuários que não estão na lista de seguidos
+    const usersNotFollowing = await db.user.findMany({
+        where: {
+          id: {
+            not: Number(userId), 
+          },
+            NOT: {
+                id: {
+                    in: followedUserIds
+                }
+            }
+        }
+    })
+
+    return usersNotFollowing
+} catch (error) {
+    console.error('Erro ao buscar usuários não seguidos:', error)
+    throw new Error('Erro ao buscar usuários não seguidos')
+}
+
+}
