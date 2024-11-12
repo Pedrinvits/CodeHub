@@ -46,31 +46,9 @@ export default function SavedPosts() {
     const fetchSavedPosts = async () => {
       try {
         const res = await GetsavedPosts();
-        // console.log(res);
-
-        // if(res.success){
-        const transformedPosts = res?.savedPosts?.map((e: any) => {
-
-          return {
-            id: e.postId,
-            title: e.post.title,
-            description: e.post.description,
-            author: {
-              id : e.post.author.id,
-              username: e.post.author.username,
-              profileImageUrl: e.post.author.profileImageUrl,
-            },
-            commentsCount: e.post._count.coments,
-            likesCount: e.post._count.postLikes,
-            created_at: e.post.created_at,
-          };
-        });
-        // console.log(transformedPosts);
-
-
-        setPosts(transformedPosts as any);
-        // }
-
+        if(res.success){
+          setPosts(res.savedPosts);
+        }
       } catch (error) {
         console.error("Error fetching saved posts", error);
       }
