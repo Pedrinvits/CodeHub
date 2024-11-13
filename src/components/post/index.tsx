@@ -488,7 +488,7 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
                         aria-expanded={activeCommentSection === post.id}
                         aria-controls={`comments-${post.id}`}
                     >
-                        Comentar
+                        Comment
                     </Button>
                 ) : (
                       <Link href={`/posts/${post.id}`} className="flex flex-row gap-4 items-center"><ChevronRight size={17} /></Link>
