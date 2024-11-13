@@ -513,7 +513,7 @@ const handlePhotoSubmit = async (event: FormEvent<HTMLFormElement>): Promise<voi
                               comment_id={comment.id} 
                               coment_username={comment.user?.username} 
                               coment_name={comment.user?.name} 
-                              coment_avatar_url={comment.user?.profileImageUrl} 
+                              coment_profileImageUrl={comment.user?.profileImageUrl} 
                               onRemoveComment={handleRemoveComment}
                             />
                           ))}

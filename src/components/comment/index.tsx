@@ -62,7 +62,7 @@ const Comment = ({ postId, content, comment_id, coment_username, coment_profileI
             <AvatarImage src={coment_profileImageUrl || ""} alt={`${coment_username}'s avatar`} />
             <AvatarFallback>{coment_username.charAt(0)}</AvatarFallback>
           </Avatar>
-          <Link href={`/profile/${coment_username}`} className="shadow-lg rounded-md">
+          <Link href={`/profile/${coment_username}`} className="rounded-md">
               <p className="font-medium">{coment_name}</p>
               <p className="text-sm text-muted-foreground">@{coment_username}</p>
           </Link>
