@@ -2,6 +2,9 @@
 
 Codehub is a social network for programmers. With Codehub, users can follow other programmers, make posts, interact with posts, and access an exclusive dashboard for administrators.
 
+
+<img   src="https://github.com/Pedrinvits/CodeHub/blob/master/src/public/codehub.PNG">
+
 ## Features
 - **Follow Users**: Follow other programmers to keep up with their posts.
 - **Posts**: Share knowledge and ideas through posts.
